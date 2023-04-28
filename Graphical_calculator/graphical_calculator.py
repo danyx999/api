@@ -1,4 +1,3 @@
-import math
 import tkinter as tk
 from tkinter import ttk
 
@@ -93,11 +92,9 @@ class Gcd:
 
     def getGcd2Nums(self, nums: list[int]) -> None:
         num1, num2 = nums
-        self.Result = math.gcd(num1, num2)
 
     def getGcd3Nums(self, nums: list[int]) -> None:
         num1, num2, num3 = nums
-        self.Result = math.gcd(math.gcd(num1, num2), num3)
 
     def __str__(self) -> str:
         pass
@@ -108,11 +105,9 @@ class Lcm:
 
     def getLcm2Nums(self, nums: list[int]) -> None:
         num1, num2 = nums
-        self.Result = math.lcm(num1, num2)
 
     def getLcm3Nums(self, nums: list[int]) -> None:
         num1, num2, num3 = nums
-        self.Result = math.lcm(math.lcm(num1, num2), num3)
 
     def __str__(self) -> str:
         pass
