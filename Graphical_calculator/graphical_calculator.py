@@ -90,11 +90,25 @@ class PrimeNumberProduct:
 class Gcd:
     Result: int
 
+    def getGcd(self, num1: int, num2: int) -> int:
+        if num2 > num1:
+            temp = num1
+            num1 = num2
+            num2 = temp
+
+        for divisor in range(2, num1):
+            if num1 % divisor == 0 and num2 % divisor == 0:
+                return divisor
+        else:
+            return 1
+
     def getGcd2Nums(self, nums: list[int]) -> None:
         num1, num2 = nums
+        self.Result = self.getGcd(num1, num2)
 
     def getGcd3Nums(self, nums: list[int]) -> None:
         num1, num2, num3 = nums
+        self.Result = self.getGcd(self.getGcd(num1, num2), num3)
 
     def __str__(self) -> str:
         pass
