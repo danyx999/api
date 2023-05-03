@@ -67,31 +67,28 @@ class App(tk.Tk):
 
 class PrimeNumberProduct:
     ProductList: list[int]
+    NumberToConvert: int
 
     def getPrimeNumberProduct(self, numberToConvert: int) -> None:
-        primeNumbers = []
-        tempNum = numberToConvert
+        self.NumberToConvert = numberToConvert
 
-        for num in range(2, numberToConvert + 1):
-            for divisor in range(2, num):
-                if num % divisor == 0:
-                    break
-            else:
-                primeNumbers.append(num)
-
-        primeNumbers.reverse()
-
-        while tempNum > 1:
-            for primeNum in primeNumbers:
-                if tempNum % primeNum == 0:
+        while numberToConvert > 1:
+            for primeNum in range(2, numberToConvert + 1):
+                if numberToConvert % primeNum == 0:
                     self.ProductList.append(primeNum)
-                    tempNum /= primeNum
+                    numberToConvert //= primeNum
+                    break
 
     def __str__(self) -> str:
         pass
 
 
 class MyMath:
+    Numbers: list[int]
+
+    def __init__(self, nums: list[int]) -> None:
+        self.Numbers = nums
+
     def getGcd(num1: int, num2: int) -> int:
         while num2 > 0:
             num1, num2 = num2, num1 % num2
@@ -101,30 +98,36 @@ class MyMath:
         return num1 * num2 / MyMath.getGcd(num1, num2)
 
 
-class Gcd:
+class Gcd(MyMath):
     Result: int
 
-    def getGcd2Nums(self, nums: list[int]) -> None:
-        num1, num2 = nums
+    def __init__(self, nums: list[int]) -> None:
+        super().__init__(nums)
+
+    def getGcd2Nums(self) -> None:
+        num1, num2 = self.Numbers
         self.Result = MyMath.getGcd(num1, num2)
 
-    def getGcd3Nums(self, nums: list[int]) -> None:
-        num1, num2, num3 = nums
+    def getGcd3Nums(self) -> None:
+        num1, num2, num3 = self.Numbers
         self.Result = MyMath.getGcd(MyMath.getGcd(num1, num2), num3)
 
     def __str__(self) -> str:
         pass
 
 
-class Lcm:
+class Lcm(MyMath):
     Result: int
 
-    def getLcm2Nums(self, nums: list[int]) -> None:
-        num1, num2 = nums
+    def __init__(self, nums: list[int]) -> None:
+        super().__init__(nums)
+
+    def getLcm2Nums(self) -> None:
+        num1, num2 = self.Numbers
         self.Result = int(MyMath.getLcm(num1, num2))
 
-    def getLcm3Nums(self, nums: list[int]) -> None:
-        num1, num2, num3 = nums
+    def getLcm3Nums(self) -> None:
+        num1, num2, num3 = self.Numbers
         self.Result = int(MyMath.getLcm(MyMath.getLcm(num1, num2), num3))
 
     def __str__(self) -> str:
