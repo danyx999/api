@@ -87,21 +87,26 @@ class PrimeNumberProduct:
         pass
 
 
-class Gcd:
-    Result: int
-
-    def getGcd(self, num1: int, num2: int) -> int:
+class MyMath:
+    def getGcd(num1: int, num2: int) -> int:
         while num2 > 0:
             num1, num2 = num2, num1 % num2
         return num1
 
+    def getLcm(num1, num2) -> float:
+        return num1 * num2 / MyMath.getGcd(num1, num2)
+
+
+class Gcd:
+    Result: int
+
     def getGcd2Nums(self, nums: list[int]) -> None:
         num1, num2 = nums
-        self.Result = self.getGcd(num1, num2)
+        self.Result = MyMath.getGcd(num1, num2)
 
     def getGcd3Nums(self, nums: list[int]) -> None:
         num1, num2, num3 = nums
-        self.Result = self.getGcd(self.getGcd(num1, num2), num3)
+        self.Result = MyMath.getGcd(MyMath.getGcd(num1, num2), num3)
 
     def __str__(self) -> str:
         pass
@@ -110,17 +115,13 @@ class Gcd:
 class Lcm:
     Result: int
 
-    def getLcm(self, num1, num2) -> float:
-        temp = Gcd()
-        return num1 * num2 / temp.getGcd(num1, num2)
-
     def getLcm2Nums(self, nums: list[int]) -> None:
         num1, num2 = nums
-        self.Result = self.getLcm(num1, num2)
+        self.Result = int(MyMath.getLcm(num1, num2))
 
     def getLcm3Nums(self, nums: list[int]) -> None:
         num1, num2, num3 = nums
-        self.Result = self.getLcm(self.getLcm(num1, num2), num3)
+        self.Result = int(MyMath.getLcm(MyMath.getLcm(num1, num2), num3))
 
     def __str__(self) -> str:
         pass
