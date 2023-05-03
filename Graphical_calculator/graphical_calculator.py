@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-GEOMETRY = "550x140"
+GEOMETRY = "550x155"
 
 
 class App(tk.Tk):
@@ -29,7 +29,7 @@ class App(tk.Tk):
         self.choiceLabel = tk.Label(
             self.radioButtonFrame, text="Choose from the options"
         )
-        self.choiceLabel.grid(column=0)
+        self.choiceLabel.grid(column=0, pady=10)
         self.modeChoice = tk.IntVar(value=0)
         self.radioButtonText = ["LCM", "GCD", "Prime number product"]
         for value, text in enumerate(self.radioButtonText):
@@ -42,14 +42,18 @@ class App(tk.Tk):
             )
             self.modeChoiceRadioButton.grid(column=0, sticky="W")
 
+        self.buttonFrame = tk.Frame(self)
+        self.buttonFrame.grid(row=1, columnspan=2, pady=15)
         self.enterButton = tk.Button(
-            self, text="Enter", command=self.getChoiceAndNumbers
+            self.buttonFrame, text="Enter", command=self.getChoiceAndNumbers
         )
-        self.enterButton.grid(column=0, row=2)
-        self.deleteButton = tk.Button(self, text="Delete", command=self.deleteText)
-        self.deleteButton.grid(column=0, row=2, columnspan=2)
-        self.quitButton = tk.Button(self, text="Quit", command=quit)
-        self.quitButton.grid(column=1, row=2)
+        self.enterButton.grid(column=0, row=0, padx=55)
+        self.deleteButton = tk.Button(
+            self.buttonFrame, text="Delete", command=self.deleteText
+        )
+        self.deleteButton.grid(column=1, row=0, padx=55)
+        self.quitButton = tk.Button(self.buttonFrame, text="Quit", command=quit)
+        self.quitButton.grid(column=2, row=0, padx=55)
 
     def getChoiceAndNumbers(self) -> None:
         pass
