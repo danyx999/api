@@ -1,7 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
 
-GEOMETRY = "550x155"
+GEOMETRY = "575x170"
 
 
 class App(tk.Tk):
@@ -13,7 +13,7 @@ class App(tk.Tk):
         self.mainFrame.grid(column=0, row=0)
         self.label = tk.Label(
             self.mainFrame,
-            text="Enter your numbers (you can enter 2 or 3 numbers separated with ',')",
+            text="Enter your numbers as integers (you can enter 2 or 3 numbers separated with ',')\nFor prime number product you can enter 1 number",
         )
         self.label.grid(column=0, row=0)
         self.numberEntry = tk.Entry(self.mainFrame, width=60)
@@ -30,13 +30,17 @@ class App(tk.Tk):
             self.radioButtonFrame, text="Choose from the options"
         )
         self.choiceLabel.grid(column=0, pady=10)
-        self.modeChoice = tk.IntVar(value=0)
-        self.radioButtonText = ["LCM", "GCD", "Prime number product"]
-        for value, text in enumerate(self.radioButtonText):
+        self.menu = {
+            "LCM": self.doLcm,
+            "GCD": self.doGcd,
+            "Prime number product": self.doPrimeNumberProduct,
+        }
+        self.modeChoice = tk.StringVar(value="LCM")
+        for text in self.menu.keys():
             self.modeChoiceRadioButton = tk.Radiobutton(
                 self.radioButtonFrame,
                 variable=self.modeChoice,
-                value=value,
+                value=text,
                 text=text,
                 compound="left",
             )
@@ -45,7 +49,7 @@ class App(tk.Tk):
         self.buttonFrame = tk.Frame(self)
         self.buttonFrame.grid(row=1, columnspan=2, pady=15)
         self.enterButton = tk.Button(
-            self.buttonFrame, text="Enter", command=self.getChoiceAndNumbers
+            self.buttonFrame, text="Enter", command=self.startChosenFunction
         )
         self.enterButton.grid(column=0, row=0, padx=55)
         self.deleteButton = tk.Button(
@@ -55,18 +59,74 @@ class App(tk.Tk):
         self.quitButton = tk.Button(self.buttonFrame, text="Quit", command=quit)
         self.quitButton.grid(column=2, row=0, padx=55)
 
-    def getChoiceAndNumbers(self) -> None:
-        pass
+    def startChosenFunction(self) -> None:
+        chosenFunction = self.menu.get(self.modeChoice.get())
+        chosenFunction()
+
+    def doLcm(self) -> None:
+        numbers = self.getEnteredValues()
+        self.result = Lcm(numbers)
+
+    def doGcd(self) -> None:
+        numbers = self.getEnteredValues()
+        self.result = Gcd(numbers)
+
+    def doPrimeNumberProduct(self) -> None:
+        numberToConvert = self.getValueForPrimeNumberProduct()
+        if numberToConvert is None:
+            self.displayErrorMessage_WhenNoOrMoreNumbersEntered()
+            return
+        self.result = PrimeNumberProduct()
+        self.result.getPrimeNumberProduct(numberToConvert)
+
+    def getEnteredValues(self) -> list[int]:
+        numbers = []
+        temp = self.numberEntry.get()
+        splitValues = temp.split(",")
+
+        for num in splitValues:
+            if self.checkNumber(num):
+                numbers.append(int(num))
+            else:
+                self.displayErrorMessage_WhenValuesIncorrectlyEntered()
+                break
+
+        return numbers
+
+    def getValueForPrimeNumberProduct(self) -> int:
+        enteredNumber = self.numberEntry.get()
+        if self.checkNumber(enteredNumber):
+            return int(enteredNumber)
+        else:
+            self.displayErrorMessage_WhenValuesIncorrectlyEntered()
+
+    def checkNumber(self, number: int) -> bool:
+        try:
+            int(number)
+            return True
+        except ValueError:
+            return False
+
+    def displayErrorMessage_WhenValuesIncorrectlyEntered(self) -> None:
+        self.deleteText()
+        self.resultText.config(state="normal")
+        self.resultText.insert("0.0", "Incorrectly entered or separated numbers")
+        self.resultText.config(state="disabled")
+
+    def displayErrorMessage_WhenNoOrMoreNumbersEntered(self) -> None:
+        self.deleteText()
+        self.resultText.config(state="normal")
+        self.resultText.insert("0.0", "No or more than 1 number was entered")
+        self.resultText.config(state="disabled")
 
     def deleteText(self) -> None:
-        self.numberEntry.delete("1.0", "end")
         self.resultText.config(state="normal")
         self.resultText.delete("1.0", "end")
         self.resultText.config(state="disabled")
 
 
 class PrimeNumberProduct:
-    ProductList: list[int]
+    ProductList: list[int] = []
     NumberToConvert: int
 
     def getPrimeNumberProduct(self, numberToConvert: int) -> None:
@@ -103,6 +163,10 @@ class Gcd(MyMath):
 
     def __init__(self, nums: list[int]) -> None:
         super().__init__(nums)
+        if len(self.Numbers) == 2:
+            self.getGcd2Nums()
+        else:
+            self.getGcd3Nums()
 
     def getGcd2Nums(self) -> None:
         num1, num2 = self.Numbers
