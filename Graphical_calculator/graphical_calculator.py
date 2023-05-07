@@ -65,16 +65,19 @@ class App(tk.Tk):
 
     def doLcm(self) -> None:
         numbers = self.getEnteredValues()
+        if len(numbers) <= 1:
+            return
         self.result = Lcm(numbers)
 
     def doGcd(self) -> None:
         numbers = self.getEnteredValues()
+        if len(numbers) <= 1:
+            return
         self.result = Gcd(numbers)
 
     def doPrimeNumberProduct(self) -> None:
         numberToConvert = self.getValueForPrimeNumberProduct()
         if numberToConvert is None:
-            self.displayErrorMessage_WhenNoOrMoreNumbersEntered()
             return
         self.result = PrimeNumberProduct()
         self.result.getPrimeNumberProduct(numberToConvert)
@@ -88,7 +91,7 @@ class App(tk.Tk):
             if self.checkNumber(num):
                 numbers.append(int(num))
             else:
-                self.displayErrorMessage_WhenValuesIncorrectlyEntered()
+                self.displayErrorMessage()
                 break
 
         return numbers
@@ -98,7 +101,7 @@ class App(tk.Tk):
         if self.checkNumber(enteredNumber):
             return int(enteredNumber)
         else:
-            self.displayErrorMessage_WhenValuesIncorrectlyEntered()
+            self.displayErrorMessage()
 
     def checkNumber(self, number: int) -> bool:
         try:
@@ -107,16 +110,10 @@ class App(tk.Tk):
         except ValueError:
             return False
 
-    def displayErrorMessage_WhenValuesIncorrectlyEntered(self) -> None:
+    def displayErrorMessage(self) -> None:
         self.deleteText()
         self.resultText.config(state="normal")
         self.resultText.insert("0.0", "Incorrectly entered or separated numbers")
-        self.resultText.config(state="disabled")
-
-    def displayErrorMessage_WhenNoOrMoreNumbersEntered(self) -> None:
-        self.deleteText()
-        self.resultText.config(state="normal")
-        self.resultText.insert("0.0", "No or more than 1 number was entered")
         self.resultText.config(state="disabled")
 
     def deleteText(self) -> None:
