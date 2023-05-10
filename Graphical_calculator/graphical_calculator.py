@@ -65,15 +65,17 @@ class App(tk.Tk):
 
     def doLcm(self) -> None:
         numbers = self.getEnteredValues()
-        if len(numbers) <= 1:
+        if len(numbers) < 2 or len(numbers) > 3:
             return
         self.result = Lcm(numbers)
+        self.displayResult()
 
     def doGcd(self) -> None:
         numbers = self.getEnteredValues()
         if len(numbers) <= 1:
             return
         self.result = Gcd(numbers)
+        self.displayResult()
 
     def doPrimeNumberProduct(self) -> None:
         numberToConvert = self.getValueForPrimeNumberProduct()
@@ -81,6 +83,7 @@ class App(tk.Tk):
             return
         self.result = PrimeNumberProduct()
         self.result.getPrimeNumberProduct(numberToConvert)
+        self.displayResult()
 
     def getEnteredValues(self) -> list[int]:
         numbers = []
@@ -110,6 +113,12 @@ class App(tk.Tk):
         except ValueError:
             return False
 
+    def displayResult(self) -> None:
+        self.deleteText()
+        self.resultText.config(state="normal")
+        self.resultText.insert("0.0", self.result)
+        self.resultText.config(state="disabled")
+
     def displayErrorMessage(self) -> None:
         self.deleteText()
         self.resultText.config(state="normal")
@@ -136,12 +145,18 @@ class PrimeNumberProduct:
                     numberToConvert //= primeNum
                     break
 
+        self.ProductList.sort()
+
     def __str__(self) -> str:
-        pass
+        numbers = []
+        for num in self.ProductList:
+            numbers.append(str(num))
+        return f"{self.NumberToConvert} = {' x '.join(numbers)}"
 
 
 class MyMath:
     Numbers: list[int]
+    Result: int
 
     def __init__(self, nums: list[int]) -> None:
         self.Numbers = nums
@@ -156,8 +171,6 @@ class MyMath:
 
 
 class Gcd(MyMath):
-    Result: int
-
     def __init__(self, nums: list[int]) -> None:
         super().__init__(nums)
         if len(self.Numbers) == 2:
@@ -174,14 +187,19 @@ class Gcd(MyMath):
         self.Result = MyMath.getGcd(MyMath.getGcd(num1, num2), num3)
 
     def __str__(self) -> str:
-        pass
+        numbers = []
+        for num in self.Numbers:
+            numbers.append(str(num))
+        return f"GCD({', '.join(numbers)}) = {self.Result}"
 
 
 class Lcm(MyMath):
-    Result: int
-
     def __init__(self, nums: list[int]) -> None:
         super().__init__(nums)
+        if len(self.Numbers) == 2:
+            self.getLcm2Nums()
+        else:
+            self.getLcm3Nums()
 
     def getLcm2Nums(self) -> None:
         num1, num2 = self.Numbers
@@ -192,7 +210,10 @@ class Lcm(MyMath):
         self.Result = int(MyMath.getLcm(MyMath.getLcm(num1, num2), num3))
 
     def __str__(self) -> str:
-        pass
+        numbers = []
+        for num in self.Numbers:
+            numbers.append(str(num))
+        return f"LCM({', '.join(numbers)}) = {self.Result}"
 
 
 def main() -> None:
