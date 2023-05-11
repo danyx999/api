@@ -16,12 +16,14 @@ class App(tk.Tk):
             text="Enter your numbers as integers (you can enter 2 or 3 numbers separated with ',')\nFor prime number product you can enter 1 number",
         )
         self.label.grid(column=0, row=0)
-        self.numberEntry = tk.Entry(self.mainFrame, width=60)
+        self.numberEntry = tk.Entry(self.mainFrame, width=65)
         self.numberEntry.grid(column=0, row=1)
 
         self.resultLabel = tk.Label(self.mainFrame, text="Results")
         self.resultLabel.grid(column=0, row=2)
-        self.resultText = tk.Text(self.mainFrame, width=45, height=3, state="disabled")
+        self.resultText = tk.Text(
+            self.mainFrame, width=55, height=3, state="disabled", font=("Arial", 9)
+        )
         self.resultText.grid(column=0, row=3)
 
         self.radioButtonFrame = tk.Frame(self)
