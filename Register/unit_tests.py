@@ -93,5 +93,28 @@ class ShopTests(unittest.TestCase):
 
         self.assertEqual(5, len(target.Registers))
 
+    def test_FindLowestCustomersInRegisters_WhenRegistersAreOpen_indexIs2(self) -> None:
+        target = Shop()
+        target.Registers[0].AddPerson("1")
+        target.Registers[1].AddPerson("1")
+        target.Registers[4].AddPerson("1")
+
+        index = target.FindLowestCustomersInRegisters()
+
+        self.assertEqual(2, index)
+
+    def test_FindLowestCustomersInRegisters_WhenSmallestRegisterIsClosed_indexIs3(
+        self,
+    ) -> None:
+        target = Shop()
+        target.Registers[0].AddPerson("1")
+        target.Registers[1].AddPerson("1")
+        target.Registers[2].Close()
+        target.Registers[4].AddPerson("1")
+
+        index = target.FindLowestCustomersInRegisters()
+
+        self.assertEqual(3, index)
+
 
 unittest.main()

@@ -30,3 +30,12 @@ class Shop:
 
     def __init__(self) -> None:
         self.Registers = [Register() for _ in range(GlobalVariables.RegisterAmount)]
+
+    def FindLowestCustomersInRegisters(self) -> int:
+        indexes = [num for num in range(len(self.Registers))]
+
+        indexes.sort(key=lambda i: len(self.Registers[i].Customers))
+
+        for i in indexes:
+            if self.Registers[i].IsOpen:
+                return i
