@@ -1,4 +1,4 @@
-REGISTER_AMOUNT = 5
+from global_variables import GlobalVariables
 
 
 class Register:
@@ -21,9 +21,12 @@ class Register:
             self.Customers.append(name)
 
     def Transact(self) -> None:
-        if len(self.Customers) > 0:
+        if len(self.Customers) > 0 and self.IsOpen:
             self.Customers.pop(0)
 
 
 class Shop:
-    Registers: list[Register] = []
+    Registers: list[Register]
+
+    def __init__(self) -> None:
+        self.Registers = [Register() for _ in range(GlobalVariables.RegisterAmount)]

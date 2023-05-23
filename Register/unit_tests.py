@@ -1,6 +1,5 @@
-import pytest
 import unittest
-from register import Register
+from register import Register, Shop
 
 
 class RegisterTests(unittest.TestCase):
@@ -62,7 +61,7 @@ class RegisterTests(unittest.TestCase):
         self.assertFalse(target.IsOpen)
         self.assertEqual(0, len(target.Customers))
 
-    def test_Transact_WhenRegisterIsOpenAndHasPeople_CustomerLengthIs0(self):
+    def test_Transact_WhenRegisterIsOpenAndHasPeople_CustomerLengthIs0(self) -> None:
         target = Register()
         target.IsOpen = True
         target.Customers.append("Peter")
@@ -71,13 +70,28 @@ class RegisterTests(unittest.TestCase):
 
         self.assertEqual(0, len(target.Customers))
 
-    def test_Transact_WhenRegisterIsOpen_CustomerLengthIs0(self):
+    def test_Transact_WhenRegisterIsOpen_CustomerLengthIs0(self) -> None:
         target = Register()
         target.IsOpen = True
 
         target.Transact()
 
         self.assertEqual(0, len(target.Customers))
+
+    def test_Transact_WhenRegisterIsClosed_CustomerLengthIs0(self) -> None:
+        target = Register()
+        target.IsOpen = False
+
+        target.Transact()
+
+        self.assertEqual(0, len(target.Customers))
+
+
+class ShopTests(unittest.TestCase):
+    def test_WhenObjectIsCreated_RegistersLengthIs5(self) -> None:
+        target = Shop()
+
+        self.assertEqual(5, len(target.Registers))
 
 
 unittest.main()
