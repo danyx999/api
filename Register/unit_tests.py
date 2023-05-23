@@ -3,118 +3,135 @@ from register import Register, Shop
 
 
 class RegisterTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.target = Register()
+
     def test_Open_WhenRegisterIsClosed_IsOpenIsTrue(self) -> None:
-        target = Register()
-        target.IsOpen = False
+        self.target.IsOpen = False
 
-        target.Open()
+        self.target.Open()
 
-        self.assertTrue(target.IsOpen)
+        self.assertTrue(self.target.IsOpen)
 
     def test_Open_WhenRegisterIsOpen_IsOpenIsTrue(self) -> None:
-        target = Register()
-        target.IsOpen = True
+        self.target.IsOpen = True
 
-        target.Open()
+        self.target.Open()
 
-        self.assertTrue(target.IsOpen)
+        self.assertTrue(self.target.IsOpen)
 
     def test_Close_WhenRegisterIsOpen_IsOpenIsFalse(self) -> None:
-        target = Register()
-        target.IsOpen = True
+        self.target.IsOpen = True
 
-        target.Close()
+        self.target.Close()
 
-        self.assertFalse(target.IsOpen)
+        self.assertFalse(self.target.IsOpen)
 
     def test_Close_WhenRegisterIsClosed_IsOpenIsFalse(self) -> None:
-        target = Register()
-        target.IsOpen = False
+        self.target.IsOpen = False
 
-        target.Close()
+        self.target.Close()
 
-        self.assertFalse(target.IsOpen)
+        self.assertFalse(self.target.IsOpen)
 
     def test_AddPerson_WhenRegisterIsClosed_CustomersLengthIs0(self) -> None:
-        target = Register()
-        target.IsOpen = False
+        self.target.IsOpen = False
 
-        target.AddPerson("Peter")
+        self.target.AddPerson("Peter")
 
-        self.assertEqual(0, len(target.Customers))
+        self.assertEqual(0, len(self.target.Customers))
 
     def test_AddPerson_WhenRegisterIsOpen_CustomersLengthIs1(self) -> None:
-        target = Register()
-        target.IsOpen = True
+        self.target.IsOpen = True
 
-        target.AddPerson("Peter")
+        self.target.AddPerson("Peter")
 
-        self.assertEqual(1, len(target.Customers))
+        self.assertEqual(1, len(self.target.Customers))
 
     def test_Close_WhenRegisterIsOpenAndHasPeople_CustomersLengthIs0(self) -> None:
-        target = Register()
-        target.IsOpen = True
-        target.Customers.append("Peter")
+        self.target.IsOpen = True
+        self.target.Customers.append("Peter")
 
-        target.Close()
+        self.target.Close()
 
-        self.assertFalse(target.IsOpen)
-        self.assertEqual(0, len(target.Customers))
+        self.assertFalse(self.target.IsOpen)
+        self.assertEqual(0, len(self.target.Customers))
 
     def test_Transact_WhenRegisterIsOpenAndHasPeople_CustomerLengthIs0(self) -> None:
-        target = Register()
-        target.IsOpen = True
-        target.Customers.append("Peter")
+        self.target.IsOpen = True
+        self.target.Customers.append("Peter")
 
-        target.Transact()
+        self.target.Transact()
 
-        self.assertEqual(0, len(target.Customers))
+        self.assertEqual(0, len(self.target.Customers))
 
     def test_Transact_WhenRegisterIsOpen_CustomerLengthIs0(self) -> None:
-        target = Register()
-        target.IsOpen = True
+        self.target.IsOpen = True
 
-        target.Transact()
+        self.target.Transact()
 
-        self.assertEqual(0, len(target.Customers))
+        self.assertEqual(0, len(self.target.Customers))
 
     def test_Transact_WhenRegisterIsClosed_CustomerLengthIs0(self) -> None:
-        target = Register()
-        target.IsOpen = False
+        self.target.IsOpen = False
 
-        target.Transact()
+        self.target.Transact()
 
-        self.assertEqual(0, len(target.Customers))
+        self.assertEqual(0, len(self.target.Customers))
 
 
 class ShopTests(unittest.TestCase):
-    def test_WhenObjectIsCreated_RegistersLengthIs5(self) -> None:
-        target = Shop()
+    def setUp(self) -> None:
+        self.target = Shop()
 
-        self.assertEqual(5, len(target.Registers))
+    def test_WhenObjectIsCreated_RegistersLengthIs5(self) -> None:
+        self.assertEqual(5, len(self.target.Registers))
 
     def test_FindLowestCustomersInRegisters_WhenRegistersAreOpen_indexIs2(self) -> None:
-        target = Shop()
-        target.Registers[0].AddPerson("1")
-        target.Registers[1].AddPerson("1")
-        target.Registers[4].AddPerson("1")
+        self.target.Registers[0].AddPerson("1")
+        self.target.Registers[1].AddPerson("1")
+        self.target.Registers[4].AddPerson("1")
 
-        index = target.FindLowestCustomersInRegisters()
+        index = self.target.FindLowestCustomersInRegisters()
 
         self.assertEqual(2, index)
 
     def test_FindLowestCustomersInRegisters_WhenSmallestRegisterIsClosed_indexIs3(
         self,
     ) -> None:
-        target = Shop()
-        target.Registers[0].AddPerson("1")
-        target.Registers[1].AddPerson("1")
-        target.Registers[2].Close()
-        target.Registers[4].AddPerson("1")
+        self.target.Registers[0].AddPerson("1")
+        self.target.Registers[1].AddPerson("1")
+        self.target.Registers[2].Close()
+        self.target.Registers[4].AddPerson("1")
 
-        index = target.FindLowestCustomersInRegisters()
+        index = self.target.FindLowestCustomersInRegisters()
 
         self.assertEqual(3, index)
+
+    def test_AddNewCustomer_WhenRegistersAreOpenAndHavePeople_RegisterLengthIs1(
+        self,
+    ) -> None:
+        self.target.Registers[0].AddPerson("1")
+        self.target.Registers[1].AddPerson("1")
+        self.target.Registers[2].AddPerson("1")
+        self.target.Registers[4].AddPerson("1")
+
+        self.target.AddNewCustomer("Name")
+
+        self.assertEqual(1, len(self.target.Registers[3].Customers))
+
+    def test_AddNewCustomer_WhenOneRegisterIsClosedAndHavePeople_RegisterLengthIs2(
+        self,
+    ) -> None:
+        self.target.Registers[0].AddPerson("1")
+        self.target.Registers[1].AddPerson("1")
+        self.target.Registers[2].AddPerson("1")
+        self.target.Registers[3].Close()
+        self.target.Registers[4].AddPerson("1")
+
+        self.target.AddNewCustomer("Name")
+
+        self.assertEqual(2, len(self.target.Registers[0].Customers))
 
 
 unittest.main()

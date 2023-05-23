@@ -39,3 +39,6 @@ class Shop:
         for i in indexes:
             if self.Registers[i].IsOpen:
                 return i
+
+    def AddNewCustomer(self, name) -> None:
+        self.Registers[self.FindLowestCustomersInRegisters()].AddPerson(name)
