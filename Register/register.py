@@ -1,6 +1,12 @@
 from global_variables import GlobalVariables
 
 
+class AllRegistersClosedException(Exception):
+    def __init__(self) -> None:
+        super().__init__()
+        self.Message = f"All registers are closed"
+
+
 class Register:
     Customers: list[str]
     Number: int
@@ -16,7 +22,7 @@ class Register:
         self.IsOpen = False
         self.Customers.clear()
 
-    def AddPerson(self, name) -> None:
+    def AddPerson(self, name: str) -> None:
         if self.IsOpen:
             self.Customers.append(name)
 
@@ -40,5 +46,16 @@ class Shop:
             if self.Registers[i].IsOpen:
                 return i
 
-    def AddNewCustomer(self, name) -> None:
-        self.Registers[self.FindLowestCustomersInRegisters()].AddPerson(name)
+    def AddNewCustomer(self, name: str) -> None:
+        i = self.FindLowestCustomersInRegisters()
+        if i is None:
+            raise AllRegistersClosedException
+        self.Registers[i].AddPerson(name)
+
+    def CloseRegister(self, registerNum: int) -> None:
+        customers = []
+        customers.extend(self.Registers[registerNum].Customers)
+        self.Registers[registerNum].Close()
+
+        for customer in customers:
+            self.AddNewCustomer(customer)

@@ -1,5 +1,5 @@
 import unittest
-from register import Register, Shop
+from register import Register, Shop, AllRegistersClosedException
 
 
 class RegisterTests(unittest.TestCase):
@@ -132,6 +132,35 @@ class ShopTests(unittest.TestCase):
         self.target.AddNewCustomer("Name")
 
         self.assertEqual(2, len(self.target.Registers[0].Customers))
+
+    def test_AddNewCustomer_WhenRegistersAreClosed_RaisesException(self) -> None:
+        self.target.Registers[0].Close()
+        self.target.Registers[1].Close()
+        self.target.Registers[2].Close()
+        self.target.Registers[3].Close()
+        self.target.Registers[4].Close()
+
+        with self.assertRaises(AllRegistersClosedException):
+            self.target.AddNewCustomer("Name")
+
+    def test_CloseRegister_WhenRegisterIsClosedAndHasPeople_OtherRegistersLengthIs1(
+        self,
+    ) -> None:
+        self.target.Registers[0].AddPerson("1")
+        self.target.Registers[0].AddPerson("2")
+        self.target.Registers[0].AddPerson("3")
+        self.target.Registers[0].AddPerson("4")
+
+        self.assertEqual(4, len(self.target.Registers[0].Customers))
+
+        self.target.CloseRegister(0)
+
+        self.assertFalse(self.target.Registers[0].IsOpen)
+        self.assertEqual(0, len(self.target.Registers[0].Customers))
+        self.assertEqual(1, len(self.target.Registers[1].Customers))
+        self.assertEqual(1, len(self.target.Registers[2].Customers))
+        self.assertEqual(1, len(self.target.Registers[3].Customers))
+        self.assertEqual(1, len(self.target.Registers[4].Customers))
 
 
 unittest.main()
