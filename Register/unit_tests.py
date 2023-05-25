@@ -162,5 +162,22 @@ class ShopTests(unittest.TestCase):
         self.assertEqual(1, len(self.target.Registers[3].Customers))
         self.assertEqual(1, len(self.target.Registers[4].Customers))
 
+    def test_CloseRegister_WhenOneRegisterIsOpenAndHasPeople_RegisterLengthIs4(
+        self,
+    ) -> None:
+        self.target.Registers[0].AddPerson("1")
+        self.target.Registers[0].AddPerson("2")
+        self.target.Registers[0].AddPerson("3")
+        self.target.Registers[0].AddPerson("4")
+        self.target.Registers[1].Close()
+        self.target.Registers[2].Close()
+        self.target.Registers[3].Close()
+        self.target.Registers[4].Close()
+
+        self.target.CloseRegister(0)
+
+        self.assertTrue(self.target.Registers[0].IsOpen)
+        self.assertEqual(4, len(self.target.Registers[0].Customers))
+
 
 unittest.main()

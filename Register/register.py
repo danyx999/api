@@ -9,7 +9,6 @@ class AllRegistersClosedException(Exception):
 
 class Register:
     Customers: list[str]
-    Number: int
     IsOpen = True
 
     def __init__(self) -> None:
@@ -42,7 +41,10 @@ class Shop:
 
         indexes.sort(key=lambda i: len(self.Registers[i].Customers))
 
-        for i in indexes:
+        return self.searchOpenRegister(indexes)
+
+    def searchOpenRegister(self, list: list[int]) -> int:
+        for i in list:
             if self.Registers[i].IsOpen:
                 return i
 
@@ -53,9 +55,16 @@ class Shop:
         self.Registers[i].AddPerson(name)
 
     def CloseRegister(self, registerNum: int) -> None:
-        customers = []
-        customers.extend(self.Registers[registerNum].Customers)
-        self.Registers[registerNum].Close()
+        openRegisters = 0
+        for register in self.Registers:
+            if register.IsOpen:
+                openRegisters += 1
+        if len(self.Registers[registerNum].Customers) > 0 and openRegisters > 1:
+            customers = []
+            customers.extend(self.Registers[registerNum].Customers)
+            self.Registers[registerNum].Close()
 
-        for customer in customers:
-            self.AddNewCustomer(customer)
+            for customer in customers:
+                self.AddNewCustomer(customer)
+        elif len(self.Registers[registerNum].Customers) == 0:
+            self.Registers[registerNum].Close()
