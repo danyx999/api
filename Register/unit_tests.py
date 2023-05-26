@@ -142,6 +142,11 @@ class ShopTests(unittest.TestCase):
 
         with self.assertRaises(AllRegistersClosedException):
             self.target.AddNewCustomer("Name")
+        self.assertEqual(0, len(self.target.Registers[0].Customers))
+        self.assertEqual(0, len(self.target.Registers[1].Customers))
+        self.assertEqual(0, len(self.target.Registers[2].Customers))
+        self.assertEqual(0, len(self.target.Registers[3].Customers))
+        self.assertEqual(0, len(self.target.Registers[4].Customers))
 
     def test_CloseRegister_WhenRegisterIsClosedAndHasPeople_OtherRegistersLengthIs1(
         self,
@@ -162,7 +167,7 @@ class ShopTests(unittest.TestCase):
         self.assertEqual(1, len(self.target.Registers[3].Customers))
         self.assertEqual(1, len(self.target.Registers[4].Customers))
 
-    def test_CloseRegister_WhenOneRegisterIsOpenAndHasPeople_RegisterLengthIs4(
+    def test_CloseRegister_WhenOneRegisterIsOpenAndHasPeople_RaisesException(
         self,
     ) -> None:
         self.target.Registers[0].AddPerson("1")
@@ -174,8 +179,8 @@ class ShopTests(unittest.TestCase):
         self.target.Registers[3].Close()
         self.target.Registers[4].Close()
 
-        self.target.CloseRegister(0)
-
+        with self.assertRaises(AllRegistersClosedException):
+            self.target.CloseRegister(0)
         self.assertTrue(self.target.Registers[0].IsOpen)
         self.assertEqual(4, len(self.target.Registers[0].Customers))
 

@@ -68,3 +68,5 @@ class Shop:
                 self.AddNewCustomer(customer)
         elif len(self.Registers[registerNum].Customers) == 0:
             self.Registers[registerNum].Close()
+        else:
+            raise AllRegistersClosedException
