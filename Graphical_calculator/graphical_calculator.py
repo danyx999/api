@@ -21,9 +21,7 @@ class App(tk.Tk):
 
         self.resultLabel = tk.Label(self.mainFrame, text="Results")
         self.resultLabel.grid(column=0, row=2)
-        self.resultText = tk.Text(
-            self.mainFrame, width=55, height=3, state="disabled", font=("Arial", 9)
-        )
+        self.resultText = tk.Label(self.mainFrame, font=("Arial", 9))
         self.resultText.grid(column=0, row=3)
 
         self.radioButtonFrame = tk.Frame(self)
@@ -116,21 +114,13 @@ class App(tk.Tk):
             return False
 
     def displayResult(self) -> None:
-        self.deleteText()
-        self.resultText.config(state="normal")
-        self.resultText.insert("0.0", self.result)
-        self.resultText.config(state="disabled")
+        self.resultText.config(text=self.result)
 
     def displayErrorMessage(self) -> None:
-        self.deleteText()
-        self.resultText.config(state="normal")
-        self.resultText.insert("0.0", "Incorrectly entered or separated numbers")
-        self.resultText.config(state="disabled")
+        self.resultText.config(text="Incorrectly entered or separated numbers")
 
     def deleteText(self) -> None:
-        self.resultText.config(state="normal")
-        self.resultText.delete("1.0", "end")
-        self.resultText.config(state="disabled")
+        self.resultText.config(text="")
 
 
 class PrimeNumberProduct:
