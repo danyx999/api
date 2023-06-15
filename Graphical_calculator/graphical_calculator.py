@@ -4,6 +4,24 @@ from tkinter import ttk
 GEOMETRY = "575x170"
 
 
+class IncorrectlyEnteredOrSeparatedNumbers(Exception):
+    def __init__(self) -> None:
+        super().__init__()
+        self.Message = "Incorrectly entered or separated numbers"
+
+
+class TooManyNumbersEnteredException(Exception):
+    def __init__(self) -> None:
+        super().__init__()
+        self.Message = "Too many numbers entered"
+
+
+class NotEnoughNumbersEnteredException(Exception):
+    def __init__(self) -> None:
+        super().__init__()
+        self.Message = "Not enough numbers entered"
+
+
 class App(tk.Tk):
     def __init__(self) -> None:
         super().__init__()
@@ -13,7 +31,7 @@ class App(tk.Tk):
         self.mainFrame.grid(column=0, row=0)
         self.label = tk.Label(
             self.mainFrame,
-            text="Enter your numbers as integers (you can enter 2 or 3 numbers separated with ',')\nFor prime number product you can enter 1 number",
+            text="Enter your numbers as integers (you can enter 2 or 3 numbers separated with ';')\nYou can only convert 1 number to prime number product",
         )
         self.label.grid(column=0, row=0)
         self.numberEntry = tk.Entry(self.mainFrame, width=65)
@@ -65,14 +83,14 @@ class App(tk.Tk):
 
     def doLcm(self) -> None:
         numbers = self.getEnteredValues()
-        if len(numbers) < 2 or len(numbers) > 3:
+        if numbers is None:
             return
         self.result = Lcm(numbers)
         self.displayResult()
 
     def doGcd(self) -> None:
         numbers = self.getEnteredValues()
-        if len(numbers) <= 1:
+        if numbers is None:
             return
         self.result = Gcd(numbers)
         self.displayResult()
@@ -88,23 +106,41 @@ class App(tk.Tk):
     def getEnteredValues(self) -> list[int]:
         numbers = []
         temp = self.numberEntry.get()
-        splitValues = temp.split(",")
+        splitValues = temp.split(";")
 
         for num in splitValues:
-            if self.checkNumber(num):
-                numbers.append(int(num))
-            else:
-                self.displayErrorMessage()
-                break
+            try:
+                if self.checkNumber(num):
+                    numbers.append(int(num))
+                else:
+                    raise IncorrectlyEnteredOrSeparatedNumbers
+            except IncorrectlyEnteredOrSeparatedNumbers as e:
+                self.displayErrorMessage(e.Message)
+                return
+
+        try:
+            if len(numbers) < 2:
+                raise NotEnoughNumbersEnteredException
+            elif len(numbers) > 3:
+                raise TooManyNumbersEnteredException
+        except NotEnoughNumbersEnteredException as e:
+            self.displayErrorMessage(e.Message)
+            return
+        except TooManyNumbersEnteredException as e:
+            self.displayErrorMessage(e.Message)
+            return
 
         return numbers
 
     def getValueForPrimeNumberProduct(self) -> int:
         enteredNumber = self.numberEntry.get()
-        if self.checkNumber(enteredNumber):
-            return int(enteredNumber)
-        else:
-            self.displayErrorMessage()
+        try:
+            if self.checkNumber(enteredNumber):
+                return int(enteredNumber)
+            else:
+                raise IncorrectlyEnteredOrSeparatedNumbers
+        except IncorrectlyEnteredOrSeparatedNumbers as e:
+            self.displayErrorMessage(e.Message)
 
     def checkNumber(self, number: int) -> bool:
         try:
@@ -114,20 +150,21 @@ class App(tk.Tk):
             return False
 
     def displayResult(self) -> None:
-        self.resultText.config(text=self.result)
+        self.resultText.config(text=self.result, fg="green")
 
-    def displayErrorMessage(self) -> None:
-        self.resultText.config(text="Incorrectly entered or separated numbers")
+    def displayErrorMessage(self, message) -> None:
+        self.resultText.config(text=message, fg="red")
 
     def deleteText(self) -> None:
         self.resultText.config(text="")
 
 
 class PrimeNumberProduct:
-    ProductList: list[int] = []
+    ProductList: list[int]
     NumberToConvert: int
 
     def getPrimeNumberProduct(self, numberToConvert: int) -> None:
+        self.ProductList = []
         self.NumberToConvert = numberToConvert
 
         while numberToConvert > 1:
@@ -140,10 +177,13 @@ class PrimeNumberProduct:
         self.ProductList.sort()
 
     def __str__(self) -> str:
-        numbers = []
-        for num in self.ProductList:
-            numbers.append(str(num))
-        return f"{self.NumberToConvert} = {' x '.join(numbers)}"
+        if self.NumberToConvert in self.ProductList:
+            return f"{self.NumberToConvert} is a prime number"
+        else:
+            numbers = []
+            for num in self.ProductList:
+                numbers.append(str(num))
+            return f"{self.NumberToConvert} = {' x '.join(numbers)}"
 
 
 class MyMath:
