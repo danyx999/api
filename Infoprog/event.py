@@ -1,4 +1,4 @@
-from datetime import time, date, datetime
+from datetime import datetime
 from global_variables import GlobalVariables
 
 
@@ -17,7 +17,7 @@ class Event:
         self.Date = eventDate.strftime(GlobalVariables.DateFormat)
         self.Text = text
 
-    def CreateStrToFile(self) -> str:
+    def CreateEventStr(self) -> str:
         return f"{GlobalVariables.Separator}".join(
             [self.Date, self.StartTime, self.EndTime, self.Text]
         )

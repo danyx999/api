@@ -1,6 +1,7 @@
 import unittest
 from event import Event
-from eventChecker import EventChecker
+from event_checker import EventChecker
+from event_handler import EventHandler
 
 
 class EventCheckerTests(unittest.TestCase):
@@ -76,10 +77,15 @@ class EventTests(unittest.TestCase):
         self.assertEqual(self.date, self.target.Date)
         self.assertEqual(self.text, self.target.Text)
 
-    def test_CreateStrToFile_WhenEventInformationIsGiven_ReturnsString(self) -> None:
+    def test_CreateEventStr_WhenEventInformationIsGiven_ReturnsString(self) -> None:
         expectedString = "17.10.2023-09:00-13:00-Zenit v Programovani"
 
-        self.assertEqual(self.target.CreateStrToFile(), expectedString)
+        self.assertEqual(self.target.CreateEventStr(), expectedString)
+
+
+class EventHandlerTests(unittest.TestCase):
+    def setUp(self) -> None:
+        self.target = EventHandler()
 
 
 unittest.main()
