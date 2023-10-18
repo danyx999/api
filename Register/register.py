@@ -41,9 +41,9 @@ class Shop:
 
         indexes.sort(key=lambda i: len(self.Registers[i].Customers))
 
-        return self.searchOpenRegister(indexes)
+        return self.SearchOpenRegister(indexes)
 
-    def searchOpenRegister(self, list: list[int]) -> int:
+    def SearchOpenRegister(self, list: list[int]) -> int:
         for i in list:
             if self.Registers[i].IsOpen:
                 return i
@@ -70,3 +70,6 @@ class Shop:
             self.Registers[registerNum].Close()
         else:
             raise AllRegistersClosedException
+
+    def OpenRegister(self, registerNum: int) -> None:
+        self.Registers[registerNum].Open()

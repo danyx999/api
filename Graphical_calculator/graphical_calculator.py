@@ -152,7 +152,7 @@ class App(tk.Tk):
     def displayResult(self) -> None:
         self.resultText.config(text=self.result, fg="green")
 
-    def displayErrorMessage(self, message) -> None:
+    def displayErrorMessage(self, message: str) -> None:
         self.resultText.config(text=message, fg="red")
 
     def deleteText(self) -> None:
