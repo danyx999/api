@@ -78,7 +78,7 @@ class EventTests(unittest.TestCase):
         self.assertEqual(self.text, self.target.Text)
 
     def test_CreateEventStr_WhenEventInformationIsGiven_ReturnsString(self) -> None:
-        expectedString = "17.10.2023-09:00-13:00-Zenit v Programovani"
+        expectedString = "09:00-13:00-17.10.2023-Zenit v Programovani"
 
         self.assertEqual(self.target.CreateEventStr(), expectedString)
 
@@ -86,6 +86,29 @@ class EventTests(unittest.TestCase):
 class EventHandlerTests(unittest.TestCase):
     def setUp(self) -> None:
         self.target = EventHandler()
+
+    def test_CreateEventStrToFile_WhenEventListIsGiven_ReturnsStrToFile(self) -> None:
+        events = [
+            Event("9:00", "13:00", "17.10.2023", "Zenit v Programovani"),
+            Event("17:00", "20:00", "19.10.2023", "Note"),
+        ]
+        expectedString = (
+            "09:00-13:00-17.10.2023-Zenit v Programovani\n17:00-20:00-19.10.2023-Note"
+        )
+
+        self.assertEqual(self.target.CreateEventStrToFile(events), expectedString)
+
+    def test_CreateEventsFromFile_WhenCorrectStrIsGiven_ReturnsEventList(self) -> None:
+        events = (
+            "09:00-13:00-17.10.2023-Zenit v Programovani\n17:00-20:00-19.10.2023-Note"
+        )
+        expectedString1 = "09:00-13:00-17.10.2023-Zenit v Programovani"
+        expectedString2 = "17:00-20:00-19.10.2023-Note"
+
+        eventList = self.target.CreateEventsFromFile(events)
+        self.assertEqual(len(eventList), 2)
+        self.assertEqual(eventList[0].CreateEventStr(), expectedString1)
+        self.assertEqual(eventList[1].CreateEventStr(), expectedString2)
 
 
 unittest.main()

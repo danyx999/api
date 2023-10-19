@@ -19,5 +19,5 @@ class Event:
 
     def CreateEventStr(self) -> str:
         return f"{GlobalVariables.Separator}".join(
-            [self.Date, self.StartTime, self.EndTime, self.Text]
+            [self.StartTime, self.EndTime, self.Date, self.Text]
         )
