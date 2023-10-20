@@ -71,14 +71,8 @@ class EventTests(unittest.TestCase):
         self.text = "Zenit v Programovani"
         self.target = Event(self.startTime, self.endTime, self.date, self.text)
 
-    def test_EventSetUp_WhenEventInformationIsGiven(self) -> None:
-        self.assertEqual(self.startTime, self.target.StartTime)
-        self.assertEqual(self.endTime, self.target.EndTime)
-        self.assertEqual(self.date, self.target.Date)
-        self.assertEqual(self.text, self.target.Text)
-
     def test_CreateEventStr_WhenEventInformationIsGiven_ReturnsString(self) -> None:
-        expectedString = "09:00-13:00-17.10.2023-Zenit v Programovani"
+        expectedString = "09:00;13:00;17.10.2023;Zenit v Programovani"
 
         self.assertEqual(self.target.CreateEventStr(), expectedString)
 
@@ -93,19 +87,59 @@ class EventHandlerTests(unittest.TestCase):
             Event("17:00", "20:00", "19.10.2023", "Note"),
         ]
         expectedString = (
-            "09:00-13:00-17.10.2023-Zenit v Programovani\n17:00-20:00-19.10.2023-Note"
+            "09:00;13:00;17.10.2023;Zenit v Programovani\n17:00;20:00;19.10.2023;Note"
         )
 
         self.assertEqual(self.target.CreateEventStrToFile(events), expectedString)
 
     def test_CreateEventsFromFile_WhenCorrectStrIsGiven_ReturnsEventList(self) -> None:
         events = (
-            "09:00-13:00-17.10.2023-Zenit v Programovani\n17:00-20:00-19.10.2023-Note"
+            "09:00;13:00;17.10.2023;Zenit v Programovani\n17:00;20:00;19.10.2023;Note"
         )
-        expectedString1 = "09:00-13:00-17.10.2023-Zenit v Programovani"
-        expectedString2 = "17:00-20:00-19.10.2023-Note"
+        expectedString1 = "09:00;13:00;17.10.2023;Zenit v Programovani"
+        expectedString2 = "17:00;20:00;19.10.2023;Note"
 
         eventList = self.target.CreateEventsFromFile(events)
+        self.assertEqual(len(eventList), 2)
+        self.assertEqual(eventList[0].CreateEventStr(), expectedString1)
+        self.assertEqual(eventList[1].CreateEventStr(), expectedString2)
+
+    def test_SortEventsByDate_WhenCorrectStrIsGiven_ReturnsSortedDateList(
+        self,
+    ) -> None:
+        events = [
+            Event("6:53", "14:25", "1.7.2005", "NOTE"),
+            Event("12:53", "18:23", "9.10.2001", "NOTE"),
+            Event("15:50", "17:30", "10.04.1998", "NOTE"),
+        ]
+
+        expectedString1 = "15:50;17:30;10.04.1998;NOTE"
+        expectedString2 = "12:53;18:23;09.10.2001;NOTE"
+        expectedString3 = "06:53;14:25;01.07.2005;NOTE"
+
+        eventList = EventHandler.SortEventsByDate(events)
+        self.assertEqual(len(eventList), 3)
+        self.assertEqual(eventList[0].CreateEventStr(), expectedString1)
+        self.assertEqual(eventList[1].CreateEventStr(), expectedString2)
+        self.assertEqual(eventList[2].CreateEventStr(), expectedString3)
+
+    def test_CreateSearchedDateList_WhenCorrectStrIsGiven_ReturnsSearchedDateList(
+        self,
+    ) -> None:
+        events = [
+            Event("6:53", "14:25", "1.7.2005", "NOTE"),
+            Event("12:53", "18:23", "9.10.2001", "NOTE"),
+            Event("15:50", "17:30", "10.04.1998", "NOTE"),
+            Event("7:00", "8:00", "1.7.2005", "NOTE"),
+            Event("5:00", "17:00", "15.3.1999", "NOTE"),
+        ]
+
+        searchedDate = "1.7.2005"
+
+        expectedString1 = "06:53;14:25;01.07.2005;NOTE"
+        expectedString2 = "07:00;08:00;01.07.2005;NOTE"
+
+        eventList = EventHandler.CreateSearchedDateList(events, searchedDate)
         self.assertEqual(len(eventList), 2)
         self.assertEqual(eventList[0].CreateEventStr(), expectedString1)
         self.assertEqual(eventList[1].CreateEventStr(), expectedString2)

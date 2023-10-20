@@ -3,21 +3,23 @@ from global_variables import GlobalVariables
 
 
 class Event:
-    StartTime: str
-    EndTime: str
-    Date: str
+    StartTime: datetime
+    EndTime: datetime
+    Date: datetime
     Text: str
 
     def __init__(self, start: str, end: str, date: str, text: str) -> None:
-        startTime = datetime.strptime(start, GlobalVariables.TimeFormat)
-        endTime = datetime.strptime(end, GlobalVariables.TimeFormat)
-        eventDate = datetime.strptime(date, GlobalVariables.DateFormat)
-        self.StartTime = startTime.strftime(GlobalVariables.TimeFormat)
-        self.EndTime = endTime.strftime(GlobalVariables.TimeFormat)
-        self.Date = eventDate.strftime(GlobalVariables.DateFormat)
+        self.StartTime = datetime.strptime(start, GlobalVariables.TimeFormat)
+        self.EndTime = datetime.strptime(end, GlobalVariables.TimeFormat)
+        self.Date = datetime.strptime(date, GlobalVariables.DateFormat)
         self.Text = text
 
     def CreateEventStr(self) -> str:
         return f"{GlobalVariables.Separator}".join(
-            [self.StartTime, self.EndTime, self.Date, self.Text]
+            [
+                self.StartTime.strftime(GlobalVariables.TimeFormat),
+                self.EndTime.strftime(GlobalVariables.TimeFormat),
+                self.Date.strftime(GlobalVariables.DateFormat),
+                self.Text,
+            ]
         )
