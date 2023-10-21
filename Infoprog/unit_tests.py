@@ -13,54 +13,54 @@ class EventCheckerTests(unittest.TestCase):
     ) -> None:
         text = 251 * "1"
 
-        self.assertFalse(self.target.CheckTextLength(text))
+        self.assertFalse(EventChecker.CheckTextLength(text))
 
     def test_CheckTextLength_WhenTextIsShorterThanMaxTextLength_ReturnsTrue(
         self,
     ) -> None:
         text = 249 * "1"
 
-        self.assertTrue(self.target.CheckTextLength(text))
+        self.assertTrue(EventChecker.CheckTextLength(text))
 
     def test_CheckDate_WhenDateIsIncorrect_ReturnsFalse(self) -> None:
         date1 = "29.2.2023"
         date2 = "6-6-2023"
         date3 = "90.6.2023"
 
-        self.assertFalse(self.target.CheckDate(date1))
-        self.assertFalse(self.target.CheckDate(date2))
-        self.assertFalse(self.target.CheckDate(date3))
+        self.assertFalse(EventChecker.CheckDate(date1))
+        self.assertFalse(EventChecker.CheckDate(date2))
+        self.assertFalse(EventChecker.CheckDate(date3))
 
     def test_CheckDate_WhenDateIsCorrect_ReturnsTrue(self) -> None:
         date = "6.6.2006"
 
-        self.assertTrue(self.target.CheckDate(date))
+        self.assertTrue(EventChecker.CheckDate(date))
 
     def test_CheckTime_WhenTimeIsIncorrect_ReturnsFalse(self) -> None:
         time1 = "10:61"
         time2 = "25:00"
         time3 = "12;15"
 
-        self.assertFalse(self.target.CheckTime(time1))
-        self.assertFalse(self.target.CheckTime(time2))
-        self.assertFalse(self.target.CheckTime(time3))
+        self.assertFalse(EventChecker.CheckTime(time1))
+        self.assertFalse(EventChecker.CheckTime(time2))
+        self.assertFalse(EventChecker.CheckTime(time3))
 
     def test_CheckTime_WhenTimeIsCorrect_ReturnsTrue(self) -> None:
         time = "14:00"
 
-        self.assertTrue(self.target.CheckTime(time))
+        self.assertTrue(EventChecker.CheckTime(time))
 
     def test_CompareTimes_WhenEndTimeIsSoonerThanStartTime_ReturnsFalse(self) -> None:
         startTime = "13:45"
         endTime = "13:00"
 
-        self.assertFalse(self.target.CompareTimes(startTime, endTime))
+        self.assertFalse(EventChecker.CompareTimes(startTime, endTime))
 
     def test_CompareTimes_WhenEndTimeIsLaterThanEndTime_ReturnsTrue(self) -> None:
         startTime = "14:30"
         endTime = "15:00"
 
-        self.assertTrue(self.target.CompareTimes(startTime, endTime))
+        self.assertTrue(EventChecker.CompareTimes(startTime, endTime))
 
 
 class EventTests(unittest.TestCase):
@@ -90,19 +90,26 @@ class EventHandlerTests(unittest.TestCase):
             "09:00;13:00;17.10.2023;Zenit v Programovani\n17:00;20:00;19.10.2023;Note"
         )
 
-        self.assertEqual(self.target.CreateEventStrToFile(events), expectedString)
+        self.assertEqual(EventHandler.CreateEventStrToFile(events), expectedString)
 
     def test_CreateEventsFromFile_WhenCorrectStrIsGiven_ReturnsEventList(self) -> None:
         events = (
-            "09:00;13:00;17.10.2023;Zenit v Programovani\n17:00;20:00;19.10.2023;Note"
+            "17:00;20:00;19.10.2023;Note\n09:00;13:00;17.10.2023;Zenit v Programovani"
         )
         expectedString1 = "09:00;13:00;17.10.2023;Zenit v Programovani"
         expectedString2 = "17:00;20:00;19.10.2023;Note"
 
-        eventList = self.target.CreateEventsFromFile(events)
+        eventList = EventHandler.CreateEventsFromFile(events)
         self.assertEqual(len(eventList), 2)
         self.assertEqual(eventList[0].CreateEventStr(), expectedString1)
         self.assertEqual(eventList[1].CreateEventStr(), expectedString2)
+
+    def test_CreateEventsFromFile_WhenFileIsEmpty_ReturnsEmptyList(self) -> None:
+        events = ""
+
+        eventList = EventHandler.CreateEventsFromFile(events)
+        self.assertEqual(len(eventList), 0)
+        self.assertEqual(eventList, [])
 
     def test_SortEventsByDate_WhenCorrectStrIsGiven_ReturnsSortedDateList(
         self,

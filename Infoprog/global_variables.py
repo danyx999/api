@@ -7,3 +7,4 @@ class GlobalVariables:
     TimeFormat: str = "%H:%M"
     Separator: str = ";"
     FilePath: str = f"{path.dirname(__file__)}\\events.txt"
+    Exit: str = "0"

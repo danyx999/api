@@ -8,13 +8,16 @@ class EventHandler:
         eventParts = event.split(f"{GlobalVariables.Separator}")
         return Event(eventParts[0], eventParts[1], eventParts[2], eventParts[3])
 
-    def CreateEventStrToFile(self, events: list[Event]) -> str:
-        return "\n".join([event.CreateEventStr() for event in events])
+    def CreateEventStrToFile(events: list[Event]) -> str:
+        sortedEvents = EventHandler.SortEventsByDate(events)
+        return "\n".join([event.CreateEventStr() for event in sortedEvents])
 
-    def CreateEventsFromFile(self, events: str) -> list[Event]:
-        return [
-            EventHandler.CreateEventFromString(event) for event in events.split("\n")
-        ]
+    def CreateEventsFromFile(events: str) -> list[Event]:
+        if len(events) == 0:
+            return []
+        return EventHandler.SortEventsByDate(
+            [EventHandler.CreateEventFromString(event) for event in events.split("\n")]
+        )
 
     def SortEventsByDate(events: list[Event]) -> list[Event]:
         return sorted(events, key=lambda e: e.Date)
