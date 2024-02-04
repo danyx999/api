@@ -55,8 +55,8 @@ class Menu:
         return text
 
     def PrintEventsSortedByDate(events: list[Event]) -> None:
-        for event in events:
-            print(event.CreateEventStr())
+        for number, event in enumerate(events):
+            print(f"{number}-{event.CreateEventStr()}")
         return events
 
     def PrintSearchedEvents(events: list[Event]) -> None:
@@ -64,8 +64,8 @@ class Menu:
         searchedEvents = EventHandler.CreateSearchedDateList(events, searchedDate)
         if len(searchedEvents) > 0:
             print(f"Events for the date {searchedDate} are:")
-            for event in searchedEvents:
-                print(event.CreateEventStr())
+            for number, event in enumerate(searchedEvents):
+                print(f"{number}-{event.CreateEventStr()}")
         else:
             print(f"There are no dates recorded for the date {searchedDate}")
 
@@ -76,8 +76,12 @@ class Menu:
         endTime = Menu.GetTime("end")
         isCorrect = False
         while not isCorrect:
-            isCorrect = EventChecker.CompareTimes(starTime, endTime)
-            if not isCorrect:
+            try:
+                isCorrect = EventChecker.CompareTimes(starTime, endTime)
+                if not isCorrect:
+                    raise StartTimeIsLaterThanEndTimeException
+            except StartTimeIsLaterThanEndTimeException as e:
+                print(e.Text)
                 choice = input("Enter which time to correct (1 - start, 2 - end): ")
                 if choice in "1":
                     starTime = Menu.GetTime("start")
@@ -110,7 +114,7 @@ def main() -> None:
             if chosenFunction:
                 events = chosenFunction(events)
             elif chosenOption == "0":
-                print("Goodbye, have a nice day")
+                print("Goodbye, have a nice day!")
                 break
             else:
                 raise IncorrectOptionException

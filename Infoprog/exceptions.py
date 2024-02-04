@@ -10,7 +10,7 @@ class TextIsLongerThanMaxTextLengthException(Exception):
 class StartTimeIsLaterThanEndTimeException(Exception):
     def __init__(self) -> None:
         super().__init__()
-        self.Text = f"Start date is later than end date"
+        self.Text = f"Start time is later than end time"
 
 
 class IncorrectDateException(Exception):

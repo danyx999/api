@@ -152,4 +152,12 @@ class EventHandlerTests(unittest.TestCase):
         self.assertEqual(eventList[1].CreateEventStr(), expectedString2)
 
 
+class EventEditorTests(unittest.TestCase):
+    pass
+
+
+class EventDeletorTests(unittest.TestCase):
+    pass
+
+
 unittest.main()

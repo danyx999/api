@@ -1,0 +1,2 @@
+class EventEditor:
+    pass
