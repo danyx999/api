@@ -4,3 +4,7 @@
 14:20;14:25;21.10.2023;Fourth manual test
 16:00;16:10;04.02.2024;Fifth manual test
 16:10;16:15;04.02.2024;Sixth manual test
+20:00;21:00;07.02.2024;Seventh manual test
+21:00;21:30;07.02.2024;Eighth manual test
+21:30;22:00;07.02.2024;Ninth manual test
+21:30;22:00;07.02.2024;Tenth manual test

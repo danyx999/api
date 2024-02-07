@@ -2,6 +2,8 @@ import unittest
 from event import Event
 from event_checker import EventChecker
 from event_handler import EventHandler
+from event_editor import EventEditor
+from event_deletor import EventDeletor
 
 
 class EventCheckerTests(unittest.TestCase):
@@ -153,7 +155,88 @@ class EventHandlerTests(unittest.TestCase):
 
 
 class EventEditorTests(unittest.TestCase):
-    pass
+    def setUp(self) -> None:
+        self.target = EventEditor()
+
+    def test_EditStartTime_CorrectStrIsGiven_ReturnsEditedEvent(self) -> None:
+        eventToEdit = Event("14:00", "15:00", "15.7.2023", "NOTE")
+        wantedStartTime = "14:30"
+
+        expectedString = "14:30;15:00;15.07.2023;NOTE"
+
+        editedEvent = EventEditor.EditStartTime(eventToEdit, wantedStartTime)
+        self.assertEqual(editedEvent.CreateEventStr(), expectedString)
+
+    def test_EditEndTime_CorrectStrIsGiven_ReturnsEditedEvent(self) -> None:
+        eventToEdit = Event("14:00", "15:00", "15.7.2023", "NOTE")
+        wantedEndTime = "14:30"
+
+        expectedString = "14:00;14:30;15.07.2023;NOTE"
+
+        editedEvent = EventEditor.EditEndTime(eventToEdit, wantedEndTime)
+        self.assertEqual(editedEvent.CreateEventStr(), expectedString)
+
+    def test_EditDate_CorrectStrIsGiven_ReturnsEditedEvent(self) -> None:
+        eventToEdit = Event("14:00", "15:00", "15.7.2023", "NOTE")
+        wantedDate = "6.6.2006"
+
+        expectedString = "14:00;15:00;06.06.2006;NOTE"
+
+        editedEvent = EventEditor.EditDate(eventToEdit, wantedDate)
+        self.assertEqual(editedEvent.CreateEventStr(), expectedString)
+
+    def test_EditNote_CorrectStrIsGiven_ReturnsEditedEvent(self) -> None:
+        eventToEdit = Event("14:00", "15:00", "15.7.2023", "NOTE")
+        wantedNote = "Different NOTE"
+
+        expectedString = "14:00;15:00;15.07.2023;Different NOTE"
+
+        editedEvent = EventEditor.EditNote(eventToEdit, wantedNote)
+        self.assertEqual(editedEvent.CreateEventStr(), expectedString)
+
+    def test_HandleEdit_EventListIsGiven_ReturnsEditedEvent1(self) -> None:
+        # Starts with 1
+        eventList = [
+            Event("14:00", "15:00", "15.7.2023", "NOTE"),
+            Event("15:50", "17:30", "10.04.1998", "NOTE"),
+            Event("6:53", "14:25", "1.7.2005", "NOTE"),
+        ]
+        eventNumberToEdit = 2
+        mode = 3
+        wantedDate = "6.6.2006"
+
+        expectedString3 = "14:00;15:00;15.07.2023;NOTE"
+        expectedString2 = "15:50;17:30;06.06.2006;NOTE"
+        expectedString1 = "06:53;14:25;01.07.2005;NOTE"
+
+        eventList = EventEditor.HandleEdit(
+            eventList, eventNumberToEdit - 1, mode, wantedDate
+        )
+        self.assertEqual(eventList[0].CreateEventStr(), expectedString1)
+        self.assertEqual(eventList[1].CreateEventStr(), expectedString2)
+        self.assertEqual(eventList[2].CreateEventStr(), expectedString3)
+
+    def test_HandleEdit_EventListIsGiven_ReturnsEditedEvent2(self) -> None:
+        # Starts with 1
+        eventList = [
+            Event("14:00", "15:00", "15.7.2023", "NOTE"),
+            Event("6:53", "14:25", "1.7.2005", "NOTE"),
+            Event("15:50", "17:30", "10.04.1998", "NOTE"),
+        ]
+        eventNumberToEdit = 3
+        mode = 3
+        wantedDate = "6.6.2006"
+
+        expectedString3 = "14:00;15:00;15.07.2023;NOTE"
+        expectedString2 = "15:50;17:30;06.06.2006;NOTE"
+        expectedString1 = "06:53;14:25;01.07.2005;NOTE"
+
+        eventList = EventEditor.HandleEdit(
+            eventList, eventNumberToEdit - 1, mode, wantedDate
+        )
+        self.assertEqual(eventList[0].CreateEventStr(), expectedString1)
+        self.assertEqual(eventList[1].CreateEventStr(), expectedString2)
+        self.assertEqual(eventList[2].CreateEventStr(), expectedString3)
 
 
 class EventDeletorTests(unittest.TestCase):

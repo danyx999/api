@@ -29,3 +29,9 @@ class IncorrectOptionException(Exception):
     def __init__(self) -> None:
         super().__init__()
         self.Text = f"Incorrectly entered option"
+
+
+class IncorrectModeException(Exception):
+    def __init__(self) -> None:
+        super().__init__()
+        self.Text = f"Incorrectly entered mode"
