@@ -22,3 +22,7 @@ This repository contains programming exercises from high school
   - Can open and close registers
   - Used TDD
   - In progress
+
+## Notes
+- All code is written in Python
+- This repository is used for learning and showcasing my solutions
