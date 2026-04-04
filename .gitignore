@@ -1,0 +1,10 @@
+# Python cache
+__pycache__/
+*.py[cod]
+
+# Text files
+*.txt
+
+# IDE
+.vscode/
+.idea/
