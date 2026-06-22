@@ -20,19 +20,25 @@ class Shop:
             if self.Registers[i].IsOpen:
                 return i
 
+        return -1
+
     def AddNewCustomer(self, name: str) -> None:
         i = self.FindLowestCustomersInRegisters()
-        if i is None:
+
+        if i == -1:
             raise AllRegistersClosedException
+
         self.Registers[i].AddPerson(name)
 
     def CloseRegister(self, registerNum: int) -> None:
         openRegisters = 0
+
         for register in self.Registers:
             if register.IsOpen:
                 openRegisters += 1
+
         if len(self.Registers[registerNum].Customers) > 0 and openRegisters > 1:
-            customers = []
+            customers: list[str] = []
             customers.extend(self.Registers[registerNum].Customers)
             self.Registers[registerNum].Close()
 

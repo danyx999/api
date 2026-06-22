@@ -1,6 +1,3 @@
-from global_variables import GlobalVariables
-
-
 class Register:
     Customers: list[str]
     IsOpen = True
