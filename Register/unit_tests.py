@@ -1,5 +1,7 @@
 import unittest
-from register import Register, Shop, AllRegistersClosedException
+from register import Register
+from shop import Shop
+from exceptions import AllRegistersClosedException
 
 
 class RegisterTests(unittest.TestCase):
