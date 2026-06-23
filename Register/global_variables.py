@@ -1,2 +1,2 @@
 class GlobalVariables:
-    RegisterAmount: int = 5
+    MaxRegisterAmount: int = 5
