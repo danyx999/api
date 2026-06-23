@@ -8,6 +8,9 @@ class Shop:
     def __init__(self) -> None:
         self.Registers = [Register() for _ in range(GlobalVariables.RegisterAmount)]
 
+        for i in range(GlobalVariables.RegisterAmount // 2):
+            self.OpenRegister(i)
+
     def FindLowestCustomersInRegisters(self) -> int:
         indexes = [num for num in range(len(self.Registers))]
 
