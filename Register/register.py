@@ -1,9 +1,10 @@
 class Register:
     Customers: list[str]
-    IsOpen = True
+    IsOpen: bool
 
     def __init__(self) -> None:
         self.Customers = []
+        self.IsOpen = False
 
     def Open(self) -> None:
         self.IsOpen = True
