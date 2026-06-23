@@ -1,7 +1,7 @@
 import unittest
 from register import Register
 from shop import Shop
-from exceptions import AllRegistersClosedException
+from exceptions import AllRegistersClosedException, AllRegistersOpenException, RegisterAlreadyOpenException, RegisterAlreadyClosedException, CannotCloseLastRegisterWithCustomersException
 
 
 class RegisterTests(unittest.TestCase):
