@@ -2,11 +2,18 @@ import unittest
 from register import Register
 from shop import Shop
 from exceptions import AllRegistersClosedException, AllRegistersOpenException, RegisterAlreadyOpenException, RegisterAlreadyClosedException, CannotCloseLastRegisterWithCustomersException, InvalidRegisterNumberException
+from global_variables import GlobalVariables
 
 
 class RegisterTests(unittest.TestCase):
     def setUp(self) -> None:
         self.target = Register()
+
+    def test_Initialization_WhenObjectIsCreated_IsOpenIsFalse(self) -> None:
+        self.assertFalse(self.target.IsOpen)
+
+    def test_Initialization_WhenObjectIsCreated_CustomersLengthIs0(self) -> None:
+        self.assertEqual(len(self.target.Customers), 0)
 
     def test_Open_WhenRegisterIsClosed_IsOpenIsTrue(self) -> None:
         self.target.IsOpen = False
@@ -86,7 +93,16 @@ class ShopTests(unittest.TestCase):
     def setUp(self) -> None:
         self.target = Shop()
 
-    def test_WhenObjectIsCreated_RegistersLengthIs5(self) -> None:
+    def test_Initialization_WhenObjectIsCreated_OpenRegisterCountIs2(self) -> None:
+        self.assertEqual(self.target.OpenRegisterCount, GlobalVariables.MaxRegisterAmount // 2)
+
+    def test_Initialization_WhenObjectIsCreated_FirstHalfOfRegistersAreOpen(self) -> None:
+        pass
+
+    def test_Initialization_WhenObjectIsCreated_SecondHalfOfRegistersAreClosed(self) -> None:
+        pass
+
+    def test_Initialization_WhenObjectIsCreated_RegistersLengthIs5(self) -> None:
         self.assertEqual(5, len(self.target.Registers))
 
     def test_FindLowestCustomersInRegisters_WhenRegistersAreOpen_indexIs2(self) -> None:
