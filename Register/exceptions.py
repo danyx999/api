@@ -9,17 +9,19 @@ class AllRegistersOpenException(Exception):
         super().__init__(message)
 
 class RegisterAlreadyOpenException(Exception):
-    def __init__(self) -> None:
-        message = f"This Register is already open"
+    def __init__(self, registerNum: int) -> None:
+        self.RegisterNum = registerNum
+        message = f"Register {registerNum} is already open"
         super().__init__(message)
 
 class RegisterAlreadyClosedException(Exception):
-    def __init__(self) -> None:
-        message = f"This register is already closed"
+    def __init__(self, registerNum: int) -> None:
+        self.RegisterNum = registerNum
+        message = f"Register {registerNum} is already closed"
         super().__init__(message)
 
 class CannotCloseLastRegisterWithCustomersException(Exception):
     def __init__(self, registerNum: int) -> None:
-        self.registerNum = registerNum
+        self.RegisterNum = registerNum
         message = f"Can't close register {registerNum}, because it's the last register open and customers are still waiting in the queue"
         super().__init__(message)
