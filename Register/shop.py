@@ -1,15 +1,18 @@
 from global_variables import GlobalVariables
-from exceptions import AllRegistersClosedException
+from exceptions import AllRegistersClosedException, AllRegistersOpenException, RegisterAlreadyOpenException, RegisterAlreadyClosedException
 from register import Register
 
 class Shop:
     Registers: list[Register]
+    OpenRegisterCount: int
 
     def __init__(self) -> None:
         self.Registers = [Register() for _ in range(GlobalVariables.RegisterAmount)]
+        self.OpenRegisterCount = 0
 
         for i in range(GlobalVariables.RegisterAmount // 2):
             self.OpenRegister(i)
+            self.OpenRegisterCount += 1
 
     def FindLowestCustomersInRegisters(self) -> int:
         indexes = [num for num in range(len(self.Registers))]
@@ -52,4 +55,13 @@ class Shop:
             raise AllRegistersClosedException
 
     def OpenRegister(self, registerNum: int) -> None:
-        self.Registers[registerNum].Open()
+        register = self.Registers[registerNum]
+
+        if register.IsOpen:
+            raise RegisterAlreadyOpenException
+
+        if self.OpenRegisterCount == GlobalVariables.RegisterAmount:
+            raise AllRegistersOpenException
+
+        register.Open()
+        self.OpenRegisterCount += 1
