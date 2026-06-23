@@ -15,8 +15,8 @@ class Shop:
 
         return self.SearchOpenRegister(indexes)
 
-    def SearchOpenRegister(self, list: list[int]) -> int:
-        for i in list:
+    def SearchOpenRegister(self, indexes: list[int]) -> int:
+        for i in indexes:
             if self.Registers[i].IsOpen:
                 return i
 
@@ -38,12 +38,11 @@ class Shop:
                 openRegisters += 1
 
         if len(self.Registers[registerNum].Customers) > 0 and openRegisters > 1:
-            customers: list[str] = []
-            customers.extend(self.Registers[registerNum].Customers)
+            customers: list[str] = self.Registers[registerNum].Customers
             self.Registers[registerNum].Close()
 
-            for customer in customers:
-                self.AddNewCustomer(customer)
+            while len(customers) > 0:
+                self.AddNewCustomer(customers.pop())
         elif len(self.Registers[registerNum].Customers) == 0:
             self.Registers[registerNum].Close()
         else:
