@@ -1,5 +1,5 @@
 from global_variables import GlobalVariables
-from exceptions import AllRegistersClosedException, AllRegistersOpenException, RegisterAlreadyOpenException, RegisterAlreadyClosedException
+from exceptions import AllRegistersClosedException, AllRegistersOpenException, RegisterAlreadyOpenException, RegisterAlreadyClosedException, CannotCloseLastRegisterWithCustomersException
 from register import Register
 
 class Shop:
@@ -7,10 +7,10 @@ class Shop:
     OpenRegisterCount: int
 
     def __init__(self) -> None:
-        self.Registers = [Register() for _ in range(GlobalVariables.RegisterAmount)]
+        self.Registers = [Register() for _ in range(GlobalVariables.MaxRegisterAmount)]
         self.OpenRegisterCount = 0
 
-        for i in range(GlobalVariables.RegisterAmount // 2):
+        for i in range(GlobalVariables.MaxRegisterAmount // 2):
             self.OpenRegister(i)
             self.OpenRegisterCount += 1
 
@@ -36,31 +36,33 @@ class Shop:
 
         self.Registers[i].AddPerson(name)
 
+    def RedistributeCustomers(self, customers: list[str]) -> None:
+        while len(customers) > 0:
+            self.AddNewCustomer(customers.pop())
+
     def CloseRegister(self, registerNum: int) -> None:
-        openRegisters = 0
+        register = self.Registers[registerNum]
 
-        for register in self.Registers:
-            if register.IsOpen:
-                openRegisters += 1
+        if not register.IsOpen:
+            raise RegisterAlreadyClosedException(registerNum)
 
-        if len(self.Registers[registerNum].Customers) > 0 and openRegisters > 1:
-            customers: list[str] = self.Registers[registerNum].Customers
-            self.Registers[registerNum].Close()
+        if self.OpenRegisterCount == 1 and len(register.Customers) > 0:
+            raise CannotCloseLastRegisterWithCustomersException(registerNum)
 
-            while len(customers) > 0:
-                self.AddNewCustomer(customers.pop())
-        elif len(self.Registers[registerNum].Customers) == 0:
-            self.Registers[registerNum].Close()
-        else:
-            raise AllRegistersClosedException
+        customers = register.Customers.copy()
+
+        register.Close()
+        self.OpenRegisterCount -= 1
+
+        self.RedistributeCustomers(customers)
 
     def OpenRegister(self, registerNum: int) -> None:
         register = self.Registers[registerNum]
 
         if register.IsOpen:
-            raise RegisterAlreadyOpenException
+            raise RegisterAlreadyOpenException(registerNum)
 
-        if self.OpenRegisterCount == GlobalVariables.RegisterAmount:
+        if self.OpenRegisterCount == GlobalVariables.MaxRegisterAmount:
             raise AllRegistersOpenException
 
         register.Open()
