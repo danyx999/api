@@ -14,7 +14,7 @@ class Shop:
             self.OpenRegister(i)
 
     def FindLowestCustomersInRegisters(self) -> int:
-        indexes = [num for num in range(len(self.Registers))]
+        indexes = [index for index in range(len(self.Registers))]
 
         indexes.sort(key=lambda i: len(self.Registers[i].Customers))
 
