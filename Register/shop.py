@@ -12,7 +12,6 @@ class Shop:
 
         for i in range(GlobalVariables.MaxRegisterAmount // 2):
             self.OpenRegister(i)
-            self.OpenRegisterCount += 1
 
     def FindLowestCustomersInRegisters(self) -> int:
         indexes = [num for num in range(len(self.Registers))]
