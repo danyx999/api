@@ -1,7 +1,7 @@
 import unittest
 from register import Register
 from shop import Shop
-from exceptions import AllRegistersClosedException, RegisterAlreadyOpenException, RegisterAlreadyClosedException, CannotCloseLastRegisterWithCustomersException, InvalidRegisterNumberException
+from exceptions import AllRegistersClosedException, RegisterAlreadyOpenException, RegisterAlreadyClosedException, CannotCloseLastRegisterWithCustomersException, InvalidRegisterNumberException, RegisterIsClosedException, NoCustomersInRegisterException
 from global_variables import GlobalVariables
 
 
@@ -334,6 +334,102 @@ class ShopTests(unittest.TestCase):
     #     self.assertTrue(self.target.Registers[1].IsOpen)
     #     self.assertEqual(1, len(self.target.Registers[0].Customers))
     #     self.assertEqual(1, len(self.target.Registers[1].Customers))
+
+    def test_ServeCustomer_WhenRegisterNumberIsNegative_RaisesInvalidRegisterNumberException(self) -> None:
+        with self.assertRaises(InvalidRegisterNumberException):
+            self.target.ServeCustomer(-5)
+
+    def test_ServeCustomer_WhenRegisterNumberIsOutOfRange_RaisesInvalidRegisterNumberException(self) -> None:
+        with self.assertRaises(InvalidRegisterNumberException):
+            self.target.ServeCustomer(999)
+
+    def test_ServeCustomer_WhenRegisterIsClosed_RaisesRegisterIsClosedException(self) -> None:
+        with self.assertRaises(RegisterIsClosedException):
+            self.target.ServeCustomer(GlobalVariables.MaxRegisterAmount - 1)
+
+    def test_ServeCustomer_WhenRegisterIsEmpty_RaisesNoCustomersInRegisterException(self) -> None:
+        with self.assertRaises(NoCustomersInRegisterException):
+            self.target.ServeCustomer(0)
+
+    def test_ServeCustomer_WhenRegisterIsEmpty_RegisterWillNotChange(self) -> None:
+        try:
+            self.target.ServeCustomer(0)
+        except NoCustomersInRegisterException:
+            self.assertEqual(len(self.target.Registers[0].Customers), 0)
+
+    def test_ServeCustomer_WhenRegisterHas1Customer_CustomerLengthIs0(self) -> None:
+        self.target.AddNewCustomer("Name")
+
+        self.target.ServeCustomer(0)
+
+        self.assertEqual(len(self.target.Registers[0].Customers), 0)
+
+    def test_ServeCustomer_WhenRegisterHas4Customers_CustomerLengthIs3(self) -> None:
+        customers = ["A", "B", "C", "D"]
+
+        self.target.CloseRegister(1)
+
+        for c in customers:
+            self.target.AddNewCustomer(c)
+
+        self.target.ServeCustomer(0)
+
+        self.assertEqual(len(self.target.Registers[0].Customers), 3)
+
+    def test_ServeCustomer_WhenRegisterHas4Customers_RegisterHasCorrectOrder(self) -> None:
+        customers = ["A", "B", "C", "D"]
+        expected_customers = ["B", "C", "D"]
+
+        self.target.CloseRegister(1)
+
+        for c in customers:
+            self.target.AddNewCustomer(c)
+
+        self.target.ServeCustomer(0)
+
+        for i in range(len(expected_customers)):
+            self.assertEqual(self.target.Registers[0].Customers[i], expected_customers[i])
+
+    def test_ServeCustomer_WhenRegisterHas4CustomersAndServes2Customers_CustomerLengthIs2(self) -> None:
+        customers = ["A", "B", "C", "D"]
+
+        self.target.CloseRegister(1)
+
+        for c in customers:
+            self.target.AddNewCustomer(c)
+
+        for _ in range(2):
+            self.target.ServeCustomer(0)
+
+        self.assertEqual(len(self.target.Registers[0].Customers), 2)
+
+    def test_ServeCustomer_WhenRegisterHas4CustomersAndServes2Customers_RegisterHasCorrectOrder(self) -> None:
+        customers = ["A", "B", "C", "D"]
+        expected_customers = ["C", "D"]
+
+        self.target.CloseRegister(1)
+
+        for c in customers:
+            self.target.AddNewCustomer(c)
+
+        for _ in range(2):
+            self.target.ServeCustomer(0)
+
+        for i in range(len(expected_customers)):
+            self.assertEqual(self.target.Registers[0].Customers[i], expected_customers[i])
+
+    def test_ServeCustomer_WhenRegisterHas4CustomersAndServesAllCustomers_RegisterIsEmpty(self) -> None:
+        customers = ["A", "B", "C", "D"]
+
+        self.target.CloseRegister(1)
+
+        for c in customers:
+            self.target.AddNewCustomer(c)
+
+        for _ in range(4):
+            self.target.ServeCustomer(0)
+
+        self.assertEqual(len(self.target.Registers[0].Customers), 0)
 
 
 unittest.main()
