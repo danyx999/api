@@ -179,7 +179,7 @@ class ShopTests(unittest.TestCase):
         for i in range(GlobalVariables.MaxRegisterAmount // 2):
             self.target.CloseRegister(i)
 
-        index = self.target.SearchOpenRegister([i for i in range(GlobalVariables.MaxRegisterAmount)])
+        index = self.target.SearchOpenRegister(list(range(GlobalVariables.MaxRegisterAmount)))
 
         self.assertEqual(index, -1)
 
@@ -187,14 +187,14 @@ class ShopTests(unittest.TestCase):
         for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
             self.target.OpenRegister(i)
 
-        index = self.target.SearchOpenRegister([i for i in range(GlobalVariables.MaxRegisterAmount)])
+        index = self.target.SearchOpenRegister(list(range(GlobalVariables.MaxRegisterAmount)))
 
         self.assertEqual(index, 0)
 
     def test_SearchOpenRegister_When1RegisterIsOpenAndIsNotTheFirst_Returns1(self) -> None:
         self.target.CloseRegister(0)
 
-        index = self.target.SearchOpenRegister([i for i in range(GlobalVariables.MaxRegisterAmount)])
+        index = self.target.SearchOpenRegister(list(range(GlobalVariables.MaxRegisterAmount)))
 
         self.assertEqual(index, 1)
 
@@ -277,7 +277,7 @@ class ShopTests(unittest.TestCase):
     def test_CloseRegister_WhenRegisterHasNoCustomers_IsOpenIsFalse(self) -> None:
         self.target.CloseRegister(1)
 
-        self.assertFalse(self.target.Registers[(GlobalVariables.MaxRegisterAmount // 2) + 1].IsOpen)
+        self.assertFalse(self.target.Registers[(GlobalVariables.MaxRegisterAmount // 2) - 1].IsOpen)
 
     def test_CloseRegister_WhenRegisterIsClosedAndHasPeople_OtherRegistersLengthIs1(self) -> None:
         for r in self.target.Registers:
@@ -332,7 +332,7 @@ class ShopTests(unittest.TestCase):
     def test_OpenRegister_WhenRegisterIsClosed_IsOpenIsTrue(self) -> None:
         self.target.OpenRegister(GlobalVariables.MaxRegisterAmount // 2)
 
-        self.assertTrue(self.target.Registers[GlobalVariables.MaxRegisterAmount // 2])
+        self.assertTrue(self.target.Registers[GlobalVariables.MaxRegisterAmount // 2].IsOpen)
 
     # def test_OpenRegister_WhenRegisterIsOpenAndHasPeople_RegistersLengthIs1(self) -> None:
     #     self.target.Registers[0].Open()
