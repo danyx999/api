@@ -250,6 +250,21 @@ class ShopTests(unittest.TestCase):
 
         self.assertEqual(len(self.target.Registers[1].Customers), 1)
 
+    def test_RedistributeCustomers_When2RegistersAreOpenAndClosedAnd2CustomersAreRedistributed_BothOpenRegistersHave1Customer(self) -> None:
+        self.target.RedistributeCustomers(["1" for _ in range(GlobalVariables.MaxRegisterAmount // 2)])
+
+        for i in range(GlobalVariables.MaxRegisterAmount // 2):
+            self.assertEqual(len(self.target.Registers[i].Customers), 1)
+
+    def test_RedistributeCustomers_WhenAllRegistersAreOpenAnd5CustomersAreRedistributed_AllRegistersHave1Customer(self) -> None:
+        for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
+            self.target.OpenRegister(i)
+
+        self.target.RedistributeCustomers(["1" for _ in range(GlobalVariables.MaxRegisterAmount)])
+
+        for i in range(GlobalVariables.MaxRegisterAmount):
+            self.assertEqual(len(self.target.Registers[i].Customers), 1)
+
     def test_CloseRegister_WhenAllRegistersAreClosed_RaisesRegisterIsAlreadyClosedException(self) -> None:
         with self.assertRaises(RegisterAlreadyClosedException):
             self.target.CloseRegister(4)
