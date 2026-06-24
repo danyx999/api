@@ -17,6 +17,6 @@ class Register:
         if self.IsOpen:
             self.Customers.append(name)
 
-    def Transact(self) -> None:
+    def Serve(self) -> None:
         if len(self.Customers) > 0 and self.IsOpen:
             self.Customers.pop(0)
