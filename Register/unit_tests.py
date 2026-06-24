@@ -352,10 +352,10 @@ class ShopTests(unittest.TestCase):
             self.target.ServeCustomer(0)
 
     def test_ServeCustomer_WhenRegisterIsEmpty_RegisterWillNotChange(self) -> None:
-        try:
+        with self.assertRaises(NoCustomersInRegisterException):
             self.target.ServeCustomer(0)
-        except NoCustomersInRegisterException:
-            self.assertEqual(len(self.target.Registers[0].Customers), 0)
+
+        self.assertEqual(len(self.target.Registers[0].Customers), 0)
 
     def test_ServeCustomer_WhenRegisterHas1Customer_CustomerLengthIs0(self) -> None:
         self.target.AddNewCustomer("Name")
@@ -387,8 +387,7 @@ class ShopTests(unittest.TestCase):
 
         self.target.ServeCustomer(0)
 
-        for i in range(len(expected_customers)):
-            self.assertEqual(self.target.Registers[0].Customers[i], expected_customers[i])
+        self.assertEqual(self.target.Registers[0].Customers, expected_customers)
 
     def test_ServeCustomer_WhenRegisterHas4CustomersAndServes2Customers_CustomerLengthIs2(self) -> None:
         customers = ["A", "B", "C", "D"]
@@ -415,8 +414,7 @@ class ShopTests(unittest.TestCase):
         for _ in range(2):
             self.target.ServeCustomer(0)
 
-        for i in range(len(expected_customers)):
-            self.assertEqual(self.target.Registers[0].Customers[i], expected_customers[i])
+        self.assertEqual(self.target.Registers[0].Customers, expected_customers)
 
     def test_ServeCustomer_WhenRegisterHas4CustomersAndServesAllCustomers_RegisterIsEmpty(self) -> None:
         customers = ["A", "B", "C", "D"]
