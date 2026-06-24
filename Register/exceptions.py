@@ -28,3 +28,15 @@ class InvalidRegisterNumberException(Exception):
         self.RegisterNum = registerNum
         message = f"Entered register number {registerNum} is invalid, the range is between 1 and {GlobalVariables.MaxRegisterAmount}"
         super().__init__(message)
+
+class RegisterIsClosedException(Exception):
+    def __init__(self, registerNum: int) -> None:
+        self.RegisterNum = registerNum
+        message = f"Can't serve customers in register {registerNum}, because it's closed"
+        super().__init__(message)
+
+class NoCustomersInRegisterException(Exception):
+    def __init__(self, registerNum: int) -> None:
+        self.RegisterNum = registerNum
+        message = f"Can't serve customers in register {registerNum}, because it's empty"
+        super().__init__(message)
