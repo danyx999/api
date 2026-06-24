@@ -1,5 +1,5 @@
 from global_variables import GlobalVariables
-from exceptions import AllRegistersClosedException, RegisterAlreadyOpenException, RegisterAlreadyClosedException, CannotCloseLastRegisterWithCustomersException, InvalidRegisterNumberException
+from exceptions import AllRegistersClosedException, RegisterAlreadyOpenException, RegisterAlreadyClosedException, CannotCloseLastRegisterWithCustomersException, InvalidRegisterNumberException, RegisterIsClosedException, NoCustomersInRegisterException
 from register import Register
 
 class Shop:
@@ -67,3 +67,6 @@ class Shop:
 
         register.Open()
         self.OpenRegisterCount += 1
+
+    def ServeCustomer(self, registerNum: int) -> None:
+        pass
