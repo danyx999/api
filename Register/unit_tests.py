@@ -1,7 +1,7 @@
 import unittest
 from register import Register
 from shop import Shop
-from exceptions import AllRegistersClosedException, AllRegistersOpenException, RegisterAlreadyOpenException, RegisterAlreadyClosedException, CannotCloseLastRegisterWithCustomersException, InvalidRegisterNumberException
+from exceptions import AllRegistersClosedException, RegisterAlreadyOpenException, RegisterAlreadyClosedException, CannotCloseLastRegisterWithCustomersException, InvalidRegisterNumberException
 from global_variables import GlobalVariables
 
 

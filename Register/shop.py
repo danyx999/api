@@ -1,5 +1,5 @@
 from global_variables import GlobalVariables
-from exceptions import AllRegistersClosedException, AllRegistersOpenException, RegisterAlreadyOpenException, RegisterAlreadyClosedException, CannotCloseLastRegisterWithCustomersException, InvalidRegisterNumberException
+from exceptions import AllRegistersClosedException, RegisterAlreadyOpenException, RegisterAlreadyClosedException, CannotCloseLastRegisterWithCustomersException, InvalidRegisterNumberException
 from register import Register
 
 class Shop:
@@ -68,9 +68,6 @@ class Shop:
 
         if register.IsOpen:
             raise RegisterAlreadyOpenException(registerNum)
-
-        if self.OpenRegisterCount == GlobalVariables.MaxRegisterAmount:
-            raise AllRegistersOpenException
 
         register.Open()
         self.OpenRegisterCount += 1

@@ -5,11 +5,6 @@ class AllRegistersClosedException(Exception):
         message = f"All registers are closed"
         super().__init__(message)
 
-class AllRegistersOpenException(Exception):
-    def __init__(self) -> None:
-        message = f"All registers are open"
-        super().__init__(message)
-
 class RegisterAlreadyOpenException(Exception):
     def __init__(self, registerNum: int) -> None:
         self.RegisterNum = registerNum
