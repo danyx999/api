@@ -14,7 +14,7 @@ class Shop:
             self.OpenRegister(i)
 
     def ValidateRegisterNumber(self, registerNum: int) -> None:
-        if GlobalVariables.MaxRegisterAmount <= registerNum < 0:
+        if registerNum < 0 or registerNum >= GlobalVariables.MaxRegisterAmount:
             raise InvalidRegisterNumberException(registerNum)
 
     def FindLowestCustomersInRegisters(self) -> int:
