@@ -279,6 +279,18 @@ class ShopTests(unittest.TestCase):
 
         self.assertFalse(self.target.Registers[(GlobalVariables.MaxRegisterAmount // 2) - 1].IsOpen)
 
+    def test_CloseRegister_WhenRegisterIsAlreadyClosed_RaisesRegisterAlreadyClosedException(self) -> None:
+        with self.assertRaises(RegisterAlreadyClosedException):
+            self.target.CloseRegister(GlobalVariables.MaxRegisterAmount - 1)
+
+    def test_CloseRegister_WhenRegisterNumberIsNegative_RaisesInvalidRegisterNumberException(self) -> None:
+        with self.assertRaises(InvalidRegisterNumberException):
+            self.target.CloseRegister(-5)
+
+    def test_CloseRegister_WhenRegisterNumberIsOutOfRange_RaisesInvalidRegisterNumberException(self) -> None:
+        with self.assertRaises(InvalidRegisterNumberException):
+            self.target.CloseRegister(999)
+
     def test_CloseRegister_WhenRegisterIsClosedAndHasPeople_OtherRegistersLengthIs1(self) -> None:
         for r in self.target.Registers:
             r.Open()
@@ -333,6 +345,18 @@ class ShopTests(unittest.TestCase):
         self.target.OpenRegister(GlobalVariables.MaxRegisterAmount // 2)
 
         self.assertTrue(self.target.Registers[GlobalVariables.MaxRegisterAmount // 2].IsOpen)
+
+    def test_OpenRegister_WhenRegisterIsAlreadyOpen_RaisesRegisterAlreadyOpenException(self) -> None:
+        with self.assertRaises(RegisterAlreadyOpenException):
+            self.target.OpenRegister(0)
+
+    def test_OpenRegister_WhenRegisterNumberIsNegative_RaisesInvalidRegisterNumberException(self) -> None:
+        with self.assertRaises(InvalidRegisterNumberException):
+            self.target.OpenRegister(-5)
+
+    def test_OpenRegister_WhenRegisterNumberIsOutOfRange_RaisesInvalidRegisterNumberException(self) -> None:
+        with self.assertRaises(InvalidRegisterNumberException):
+            self.target.OpenRegister(999)
 
     # def test_OpenRegister_WhenRegisterIsOpenAndHasPeople_RegistersLengthIs1(self) -> None:
     #     self.target.Registers[0].Open()
