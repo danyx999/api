@@ -107,6 +107,10 @@ class ShopTests(unittest.TestCase):
     def test_Initialization_WhenObjectIsCreated_RegistersLengthIs5(self) -> None:
         self.assertEqual(5, len(self.target.Registers))
 
+    def test_Initialization_WhenObjectIsCreated_AllCustomersListsAreEmpty(self) -> None:
+        for r in self.target.Registers:
+            self.assertEqual(len(r.Customers), 0)
+
     def test_FindLowestCustomersInRegisters_WhenAllRegistersAreClosed_IndexIsMinus1(self) -> None:
         for i in range(GlobalVariables.MaxRegisterAmount // 2):
             self.target.Registers[i].Close()
@@ -205,9 +209,25 @@ class ShopTests(unittest.TestCase):
         self.assertEqual(0, len(self.target.Registers[3].Customers))
         self.assertEqual(0, len(self.target.Registers[4].Customers))
 
+    def test_AddNewCustomer_WhenOneOpenRegisterExists_CustomerIsAdded(self) -> None:
+        self.target.CloseRegister(0)
+        self.target.AddNewCustomer("Name")
+
+        self.assertEqual(len(self.target.Registers[1].Customers), 1)
+
     def test_CloseRegister_WhenAllRegistersAreClosed_RaisesRegisterIsAlreadyClosedException(self) -> None:
         with self.assertRaises(RegisterAlreadyClosedException):
             self.target.CloseRegister(4)
+
+    def test_CloseRegister_WhenRegisterHasNoCustomers_OpenRegisterCountIsDecremented(self) -> None:
+        self.target.CloseRegister((GlobalVariables.MaxRegisterAmount // 2) - 1)
+
+        self.assertEqual(self.target.OpenRegisterCount, (GlobalVariables.MaxRegisterAmount // 2) - 1)
+
+    def test_CloseRegister_WhenRegisterHasNoCustomers_IsOpenIsFalse(self) -> None:
+        self.target.CloseRegister(1)
+
+        self.assertFalse(self.target.Registers[(GlobalVariables.MaxRegisterAmount // 2) + 1].IsOpen)
 
     def test_CloseRegister_WhenRegisterIsClosedAndHasPeople_OtherRegistersLengthIs1(self) -> None:
         for r in self.target.Registers:
@@ -253,6 +273,16 @@ class ShopTests(unittest.TestCase):
 
         with self.assertRaises(RegisterAlreadyOpenException):
             self.target.OpenRegister(0)
+
+    def test_OpenRegister_WhenRegisterIsClosed_OpenRegisterCountIsIncremented(self) -> None:
+        self.target.OpenRegister(GlobalVariables.MaxRegisterAmount // 2)
+
+        self.assertEqual(self.target.OpenRegisterCount, (GlobalVariables.MaxRegisterAmount // 2) + 1)
+
+    def test_OpenRegister_WhenRegisterIsClosed_IsOpenIsTrue(self) -> None:
+        self.target.OpenRegister(GlobalVariables.MaxRegisterAmount // 2)
+
+        self.assertTrue(self.target.Registers[GlobalVariables.MaxRegisterAmount // 2])
 
     def test_OpenRegister_WhenRegisterIsOpenAndHasPeople_RegistersLengthIs1(self) -> None:
         self.target.Registers[0].Open()
