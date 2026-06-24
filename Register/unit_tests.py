@@ -111,6 +111,18 @@ class ShopTests(unittest.TestCase):
         for r in self.target.Registers:
             self.assertEqual(len(r.Customers), 0)
 
+    def test_ValidateRegisterNumber_WhenRegisterNumberIsNegative_RaisesInvalidRegisterNumberException(self) -> None:
+        with self.assertRaises(InvalidRegisterNumberException):
+            self.target.ValidateRegisterNumber(-5)
+
+    def test_ValidateRegisterNumber_WhenRegisterNumberIsPositiveAndIsLargerThanOrEqualToMaxRegisterAmount_RaisesInvalidRegisterNumberException(self) -> None:
+        with self.assertRaises(InvalidRegisterNumberException):
+            self.target.ValidateRegisterNumber(999)
+
+    def test_ValidateRegisterNumber_WhenRegisterNumberIsWithin0AndMaxRegisterAmount_DoesNotRaiseException(self) -> None:
+        for i in range(GlobalVariables.MaxRegisterAmount):
+            self.target.ValidateRegisterNumber(i)
+
     def test_FindLowestCustomersInRegisters_WhenAllRegistersAreClosed_IndexIsMinus1(self) -> None:
         for i in range(GlobalVariables.MaxRegisterAmount // 2):
             self.target.Registers[i].Close()
