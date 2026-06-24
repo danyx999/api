@@ -69,4 +69,14 @@ class Shop:
         self.OpenRegisterCount += 1
 
     def ServeCustomer(self, registerNum: int) -> None:
-        pass
+        self.ValidateRegisterNumber(registerNum)
+
+        register = self.Registers[registerNum]
+
+        if not register.IsOpen:
+            raise RegisterIsClosedException(registerNum)
+
+        if len(register.Customers) == 0:
+            raise NoCustomersInRegisterException(registerNum)
+
+        register.Serve()
