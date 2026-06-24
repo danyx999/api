@@ -18,18 +18,14 @@ class Shop:
             raise InvalidRegisterNumberException(registerNum)
 
     def FindLowestCustomersInRegisters(self) -> int:
-        indexes = [index for index in range(len(self.Registers))]
+        if self.OpenRegisterCount == 0:
+            return -1
+
+        indexes = [index for index in range(len(self.Registers)) if self.Registers[index].IsOpen]
 
         indexes.sort(key=lambda i: len(self.Registers[i].Customers))
 
-        return self.SearchOpenRegister(indexes)
-
-    def SearchOpenRegister(self, indexes: list[int]) -> int:
-        for i in indexes:
-            if self.Registers[i].IsOpen:
-                return i
-
-        return -1
+        return indexes[0]
 
     def AddNewCustomer(self, name: str) -> None:
         i = self.FindLowestCustomersInRegisters()
