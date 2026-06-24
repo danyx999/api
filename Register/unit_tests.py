@@ -70,21 +70,21 @@ class RegisterTests(unittest.TestCase):
         self.target.IsOpen = True
         self.target.Customers.append("Peter")
 
-        self.target.Transact()
+        self.target.Serve()
 
         self.assertEqual(0, len(self.target.Customers))
 
     def test_Transact_WhenRegisterIsOpen_CustomerLengthIs0(self) -> None:
         self.target.IsOpen = True
 
-        self.target.Transact()
+        self.target.Serve()
 
         self.assertEqual(0, len(self.target.Customers))
 
     def test_Transact_WhenRegisterIsClosed_CustomerLengthIs0(self) -> None:
         self.target.IsOpen = False
 
-        self.target.Transact()
+        self.target.Serve()
 
         self.assertEqual(0, len(self.target.Customers))
 
