@@ -17,18 +17,18 @@ class Shop:
         if registerNum < 0 or registerNum >= GlobalVariables.MaxRegisterAmount:
             raise InvalidRegisterNumberException(registerNum)
 
-    def FindLowestCustomersInRegisters(self) -> int:
+    def FindLowestAndHighestCustomerAmountInRegisters(self) -> tuple[int, int]:
         if self.OpenRegisterCount == 0:
-            return -1
+            return (-1, -1)
 
         indexes = [index for index in range(len(self.Registers)) if self.Registers[index].IsOpen]
 
         indexes.sort(key=lambda i: len(self.Registers[i].Customers))
 
-        return indexes[0]
+        return (indexes[0], indexes[-1])
 
     def AddNewCustomer(self, name: str) -> None:
-        i = self.FindLowestCustomersInRegisters()
+        i, _ = self.FindLowestAndHighestCustomerAmountInRegisters()
 
         if i == -1:
             raise AllRegistersClosedException
