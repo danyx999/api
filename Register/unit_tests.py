@@ -127,7 +127,7 @@ class ShopTests(unittest.TestCase):
         for i in range(GlobalVariables.MaxRegisterAmount // 2):
             self.target.CloseRegister(i)
 
-        index = self.target.FindLowestAndHighestCustomerAmountInRegisters()
+        index, _ = self.target.FindLowestAndHighestCustomerAmountInRegisters()
 
         self.assertEqual(-1, index)
 
@@ -139,7 +139,7 @@ class ShopTests(unittest.TestCase):
         self.target.Registers[1].AddPerson("1")
         self.target.Registers[4].AddPerson("1")
 
-        index = self.target.FindLowestAndHighestCustomerAmountInRegisters()
+        index, _ = self.target.FindLowestAndHighestCustomerAmountInRegisters()
 
         self.assertEqual(2, index)
 
@@ -152,7 +152,7 @@ class ShopTests(unittest.TestCase):
         self.target.CloseRegister(2)
         self.target.Registers[4].AddPerson("1")
 
-        index = self.target.FindLowestAndHighestCustomerAmountInRegisters()
+        index, _ = self.target.FindLowestAndHighestCustomerAmountInRegisters()
 
         self.assertEqual(3, index)
 
@@ -166,7 +166,7 @@ class ShopTests(unittest.TestCase):
         self.target.Registers[3].AddPerson("1")
         self.target.Registers[4].AddPerson("1")
 
-        index = self.target.FindLowestAndHighestCustomerAmountInRegisters()
+        index, _ = self.target.FindLowestAndHighestCustomerAmountInRegisters()
 
         self.assertEqual(0, index)
 
