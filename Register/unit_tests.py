@@ -123,7 +123,7 @@ class ShopTests(unittest.TestCase):
         for i in range(GlobalVariables.MaxRegisterAmount):
             self.target.ValidateRegisterNumber(i)
 
-    def test_FindLowestCustomersInRegisters_WhenAllRegistersAreClosed_IndexIsMinus1(self) -> None:
+    def test_FindLowestAndHighestCustomerAmountInRegisters_WhenAllRegistersAreClosed_IndexIsMinus1(self) -> None:
         for i in range(GlobalVariables.MaxRegisterAmount // 2):
             self.target.CloseRegister(i)
 
@@ -131,7 +131,7 @@ class ShopTests(unittest.TestCase):
 
         self.assertEqual(-1, index)
 
-    def test_FindLowestCustomersInRegisters_WhenRegistersAreOpen_indexIs2(self) -> None:
+    def test_FindLowestAndHighestCustomerAmountInRegisters_WhenRegistersAreOpen_indexIs2(self) -> None:
         for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
             self.target.OpenRegister(i)
 
@@ -143,7 +143,7 @@ class ShopTests(unittest.TestCase):
 
         self.assertEqual(2, index)
 
-    def test_FindLowestCustomersInRegisters_WhenSmallestRegisterIsClosed_indexIs3(self) -> None:
+    def test_FindLowestAndHighestCustomerAmountInRegisters_WhenSmallestRegisterIsClosed_indexIs3(self) -> None:
         for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
             self.target.OpenRegister(i)
 
@@ -156,7 +156,7 @@ class ShopTests(unittest.TestCase):
 
         self.assertEqual(3, index)
 
-    def test_FindLowestCustomersInRegisters_WhenAllRegisterAreOpenAndHavePeople_indexIs0(self) -> None:
+    def test_FindLowestAndHighestCustomerAmountInRegisters_WhenAllRegisterAreOpenAndHavePeople_indexIs0(self) -> None:
         for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
             self.target.OpenRegister(i)
 
