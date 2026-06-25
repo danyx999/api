@@ -171,6 +171,46 @@ class ShopTests(unittest.TestCase):
 
         self.assertEqual(0, index)
 
+    def test_FindLowestAndHighestCustomerAmountInRegisters_WhenRegistersAreOpen_HighIs4(self) -> None:
+        for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
+            self.target.OpenRegister(i)
+
+        self.target.Registers[0].AddPerson("1")
+        self.target.Registers[1].AddPerson("1")
+        self.target.Registers[4].AddPerson("1")
+
+        _, index = self.target.FindLowestAndHighestCustomerAmountInRegisters()
+
+        self.assertEqual(4, index)
+
+    def test_FindLowestAndHighestCustomerAmountInRegisters_WhenHighestRegisterIsFirst_HighIs0(self) -> None:
+        for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
+            self.target.OpenRegister(i)
+
+        self.target.Registers[0].AddPerson("1")
+        self.target.Registers[0].AddPerson("1")
+        self.target.Registers[1].AddPerson("1")
+        self.target.CloseRegister(2)
+        self.target.Registers[4].AddPerson("1")
+
+        _, index = self.target.FindLowestAndHighestCustomerAmountInRegisters()
+
+        self.assertEqual(0, index)
+
+    def test_FindLowestAndHighestCustomerAmountInRegisters_WhenAllRegisterAreOpenAndHavePeople_HighIs4(self) -> None:
+        for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
+            self.target.OpenRegister(i)
+
+        self.target.Registers[0].AddPerson("1")
+        self.target.Registers[1].AddPerson("1")
+        self.target.Registers[2].AddPerson("1")
+        self.target.Registers[3].AddPerson("1")
+        self.target.Registers[4].AddPerson("1")
+
+        _, index= self.target.FindLowestAndHighestCustomerAmountInRegisters()
+
+        self.assertEqual(4, index)
+
     def test_AddNewCustomer_WhenRegistersAreOpenAndHavePeople_RegisterLengthIs1(self) -> None:
         for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
             self.target.OpenRegister(i)
