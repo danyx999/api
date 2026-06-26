@@ -57,6 +57,9 @@ class Shop:
 
         self.RedistributeCustomers(customers)
 
+    def BalanceCustomers(self) -> None:
+        pass
+
     def OpenRegister(self, registerNum: int) -> None:
         self.ValidateRegisterNumber(registerNum)
 
