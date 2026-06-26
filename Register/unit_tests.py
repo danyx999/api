@@ -332,6 +332,266 @@ class ShopTests(unittest.TestCase):
         self.assertTrue(self.target.Registers[0].IsOpen)
         self.assertEqual(4, len(self.target.Registers[0].Customers))
 
+    def test_BalanceCustomers_When1RegisterIsOpenAndHasNoCustomers_NothingHappens(self) -> None:
+        self.target.CloseRegister(1)
+
+        self.target.BalanceCustomers()
+
+        self.assertEqual(self.target.Registers[0].Customers, [])
+
+    def test_BalanceCustomers_When1RegisterIsOpenAndHas1Customer_NothingHappens(self) -> None:
+        self.target.CloseRegister(1)
+        self.target.Registers[0].AddPerson("Name")
+
+        self.target.BalanceCustomers()
+
+        self.assertEqual(self.target.Registers[0].Customers, ["Name"])
+
+    def test_BalanceCustomers_When1RegisterIsOpenAndHasManyCustomers_NothingHappens(self) -> None:
+        self.target.CloseRegister(1)
+
+        customers = [str(n) for n in range(5)]
+
+        for c in customers:
+            self.target.Registers[0].AddPerson(c)
+
+        self.target.BalanceCustomers()
+
+        self.assertEqual(self.target.Registers[0].Customers, customers)
+
+    def test_BalanceCustomers_When2RegistersAreOpenAndAreAlreadyBalancedAndHasNoCustomers_NothingHappens(self) -> None:
+        self.target.BalanceCustomers()
+
+        for i in range(2):
+            self.assertEqual(self.target.Registers[i].Customers, [])
+
+    def test_BalanceCustomers_When2RegistersAreOpenAndAreAlreadyBalancedAndCustomersAreEven_NothingHappens(self) -> None:
+        customers1 = [str(c) for c in range(2)]
+        customers2 = [str(c) for c in range(2)]
+
+        for c1, c2 in zip(customers1, customers2):
+            self.target.Registers[0].AddPerson(c1)
+            self.target.Registers[1].AddPerson(c2)
+
+        self.target.BalanceCustomers()
+
+        self.assertEqual(self.target.Registers[0].Customers, customers1)
+        self.assertEqual(self.target.Registers[1].Customers, customers2)
+
+    def test_BalanceCustomers_When2RegistersAreOpenAndAreAlreadyBalancedAndCustomersAreOdd_NothingHappens(self) -> None:
+        customers1 = [str(c) for c in range(2)]
+        customers2 = [str(c) for c in range(3)]
+
+        for c1 in customers1:
+            self.target.Registers[0].AddPerson(c1)
+
+        for c2 in customers2:
+            self.target.Registers[1].AddPerson(c2)
+
+        self.target.BalanceCustomers()
+
+        self.assertEqual(self.target.Registers[0].Customers, customers1)
+        self.assertEqual(self.target.Registers[1].Customers, customers2)
+
+    def test_BalanceCustomers_When2RegistersAreOpenAndRegisterHasEvenCustomers_RegistersBecomeBalanced(self) -> None:
+        customers = [str(c) for c in range(4)]
+
+        for c in customers:
+            self.target.Registers[0].AddPerson(c)
+
+        self.target.BalanceCustomers()
+
+        sizes = [len(r.Customers) for r in self.target.Registers if r.IsOpen]
+
+        self.assertEqual(sum(sizes), len(customers))
+        self.assertLessEqual(max(sizes) - min(sizes), 1)
+
+    def test_BalanceCustomers_When2RegistersAreOpenAndRegisterHasOddCustomers_RegistersBecomeBalanced(self) -> None:
+        customers = [str(c) for c in range(5)]
+
+        for c in customers:
+            self.target.Registers[0].AddPerson(c)
+
+        self.target.BalanceCustomers()
+
+        sizes = [len(r.Customers) for r in self.target.Registers if r.IsOpen]
+
+        self.assertEqual(sum(sizes), len(customers))
+        self.assertLessEqual(max(sizes) - min(sizes), 1)
+
+    def test_BalanceCustomers_When3RegistersAreOpenAndAreAlreadyBalancedHasNoCustomers_NothingHappens(self) -> None:
+        self.target.OpenRegister(2)
+
+        self.target.BalanceCustomers()
+
+        for i in range(3):
+            self.assertEqual(self.target.Registers[i].Customers, [])
+
+    def test_BalanceCustomers_When3RegistersAreOpenAndAreAlreadyBalancedAndCustomersAreEven_NothingHappens(self) -> None:
+        customers1 = [str(c) for c in range(3)]
+        customers2 = [str(c) for c in range(3)]
+        customers3 = [str(c) for c in range(2)]
+
+        self.target.OpenRegister(2)
+
+        for c1, c2 in zip(customers1, customers2):
+            self.target.Registers[0].AddPerson(c1)
+            self.target.Registers[1].AddPerson(c2)
+
+        for c3 in customers3:
+            self.target.Registers[2].AddPerson(c3)
+
+        self.target.BalanceCustomers()
+
+        self.assertEqual(self.target.Registers[0].Customers, customers1)
+        self.assertEqual(self.target.Registers[1].Customers, customers2)
+        self.assertEqual(self.target.Registers[2].Customers, customers3)
+
+    def test_BalanceCustomers_When3RegistersAreOpenAndAreAlreadyBalancedAndCustomersAreOdd_NothingHappens(self) -> None:
+        customers1 = [str(c) for c in range(2)]
+        customers2 = [str(c) for c in range(2)]
+        customers3 = [str(c) for c in range(3)]
+
+        self.target.OpenRegister(2)
+
+        for c1, c2 in zip(customers1, customers2):
+            self.target.Registers[0].AddPerson(c1)
+            self.target.Registers[1].AddPerson(c2)
+
+        for c3 in customers3:
+            self.target.Registers[2].AddPerson(c3)
+
+        self.target.BalanceCustomers()
+
+        self.assertEqual(self.target.Registers[0].Customers, customers1)
+        self.assertEqual(self.target.Registers[1].Customers, customers2)
+        self.assertEqual(self.target.Registers[2].Customers, customers3)
+
+    def test_BalanceCustomers_When3RegistersAreOpenAndRegisterHasEvenCustomers_RegistersBecomeBalanced(self) -> None:
+        customers = [str(c) for c in range(6)]
+
+        for c in customers:
+            self.target.Registers[0].AddPerson(c)
+
+        self.target.OpenRegister(2)
+
+        self.target.BalanceCustomers()
+
+        sizes = [len(r.Customers) for r in self.target.Registers if r.IsOpen]
+
+        self.assertEqual(sum(sizes), len(customers))
+        self.assertLessEqual(max(sizes) - min(sizes), 1)
+
+    def test_BalanceCustomers_When3RegistersAreOpenAndRegisterHasOddCustomers_RegistersBecomeBalanced(self) -> None:
+        customers = [str(c) for c in range(7)]
+
+        for c in customers:
+            self.target.Registers[0].AddPerson(c)
+
+        self.target.OpenRegister(2)
+
+        self.target.BalanceCustomers()
+
+        sizes = [len(r.Customers) for r in self.target.Registers if r.IsOpen]
+
+        self.assertEqual(sum(sizes), len(customers))
+        self.assertLessEqual(max(sizes) - min(sizes), 1)
+
+    def test_BalanceCustomers_WhenAllRegistersAreOpenAndAreAlreadyBalancedAndHasNoCustomers_NothingHappens(self) -> None:
+        for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
+            self.target.OpenRegister(i)
+
+        self.target.BalanceCustomers()
+
+        for i in range(GlobalVariables.MaxRegisterAmount):
+            self.assertEqual(self.target.Registers[i].Customers, [])
+
+    def test_BalanceCustomers_WhenAllRegistersAreOpenAndAreAlreadyBalancedAndCustomersAreEven_NothingHappens(self) -> None:
+        customers1 = [str(c) for c in range(3)]
+        customers2 = [str(c) for c in range(3)]
+        customers3 = [str(c) for c in range(2)]
+        customers4 = [str(c) for c in range(3)]
+        customers5 = [str(c) for c in range(3)]
+
+        for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
+            self.target.OpenRegister(i)
+
+        for c1, c2, c4, c5 in zip(customers1, customers2, customers4, customers5):
+            self.target.Registers[0].AddPerson(c1)
+            self.target.Registers[1].AddPerson(c2)
+            self.target.Registers[3].AddPerson(c4)
+            self.target.Registers[4].AddPerson(c5)
+
+        for c3 in customers3:
+            self.target.Registers[2].AddPerson(c3)
+
+        self.target.BalanceCustomers()
+
+        self.assertEqual(self.target.Registers[0].Customers, customers1)
+        self.assertEqual(self.target.Registers[1].Customers, customers2)
+        self.assertEqual(self.target.Registers[2].Customers, customers3)
+        self.assertEqual(self.target.Registers[3].Customers, customers4)
+        self.assertEqual(self.target.Registers[4].Customers, customers5)
+
+    def test_BalanceCustomers_WhenAllRegistersAreOpenAndAreAlreadyBalancedAndCustomersAreOdd_NothingHappens(self) -> None:
+        customers1 = [str(c) for c in range(2)]
+        customers2 = [str(c) for c in range(3)]
+        customers3 = [str(c) for c in range(3)]
+        customers4 = [str(c) for c in range(2)]
+        customers5 = [str(c) for c in range(3)]
+
+        for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
+            self.target.OpenRegister(i)
+
+        for c1, c4 in zip(customers1, customers4):
+            self.target.Registers[0].AddPerson(c1)
+            self.target.Registers[3].AddPerson(c4)
+
+        for c2, c3, c5 in zip(customers2, customers3, customers5):
+            self.target.Registers[1].AddPerson(c2)
+            self.target.Registers[2].AddPerson(c3)
+            self.target.Registers[4].AddPerson(c5)
+
+        self.target.BalanceCustomers()
+
+        self.assertEqual(self.target.Registers[0].Customers, customers1)
+        self.assertEqual(self.target.Registers[1].Customers, customers2)
+        self.assertEqual(self.target.Registers[2].Customers, customers3)
+        self.assertEqual(self.target.Registers[3].Customers, customers4)
+        self.assertEqual(self.target.Registers[4].Customers, customers5)
+
+    def test_BalanceCustomers_WhenAllRegistersAreOpenAndRegisterHasEvenCustomers_RegistersBecomeBalanced(self) -> None:
+        customers = [str(c) for c in range(10)]
+
+        for c in customers:
+            self.target.Registers[0].AddPerson(c)
+
+        for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
+            self.target.OpenRegister(i)
+
+        self.target.BalanceCustomers()
+
+        sizes = [len(r.Customers) for r in self.target.Registers if r.IsOpen]
+
+        self.assertEqual(sum(sizes), len(customers))
+        self.assertLessEqual(max(sizes) - min(sizes), 1)
+
+    def test_BalanceCustomers_WhenAllRegistersAreOpenAndRegisterHasOddCustomers_RegistersBecomeBalanced(self) -> None:
+        customers = [str(c) for c in range(13)]
+
+        for c in customers:
+            self.target.Registers[0].AddPerson(c)
+
+        for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
+            self.target.OpenRegister(i)
+
+        self.target.BalanceCustomers()
+
+        sizes = [len(r.Customers) for r in self.target.Registers if r.IsOpen]
+
+        self.assertEqual(sum(sizes), len(customers))
+        self.assertLessEqual(max(sizes) - min(sizes), 1)
+
     def test_OpenRegister_WhenAllRegistersAreOpen_RaisesRegisterAlreadyOpenException(self) -> None:
         for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount):
             self.target.OpenRegister(i)
