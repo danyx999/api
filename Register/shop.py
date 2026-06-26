@@ -58,7 +58,14 @@ class Shop:
         self.RedistributeCustomers(customers)
 
     def BalanceCustomers(self) -> None:
-        pass
+        while True:
+            low, high = self.FindLowestAndHighestCustomerAmountInRegisters()
+
+            if len(self.Registers[high].Customers) - len(self.Registers[low].Customers) <= 1:
+                break
+
+            customer = self.Registers[high].Customers.pop()
+            self.Registers[low].AddPerson(customer)
 
     def OpenRegister(self, registerNum: int) -> None:
         self.ValidateRegisterNumber(registerNum)
