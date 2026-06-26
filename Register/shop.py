@@ -77,6 +77,7 @@ class Shop:
 
         register.Open()
         self.OpenRegisterCount += 1
+        self.BalanceCustomers()
 
     def ServeCustomer(self, registerNum: int) -> None:
         self.ValidateRegisterNumber(registerNum)
