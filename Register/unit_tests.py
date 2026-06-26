@@ -621,20 +621,88 @@ class ShopTests(unittest.TestCase):
         with self.assertRaises(InvalidRegisterNumberException):
             self.target.OpenRegister(999)
 
-    # def test_OpenRegister_WhenRegisterIsOpenAndHasPeople_RegistersLengthIs1(self) -> None:
-    #     self.target.Registers[0].Open()
-    #     self.target.Registers[0].AddPerson("1")
-    #     self.target.Registers[0].AddPerson("2")
-    #     self.target.Registers[1].Close()
-    #     self.target.Registers[2].Close()
-    #     self.target.Registers[3].Close()
-    #     self.target.Registers[4].Close()
+    def test_OpenRegister_WhenNoCustomersExist_NoCustomersAreMoved(self) -> None:
+        self.target.OpenRegister(GlobalVariables.MaxRegisterAmount // 2)
 
-    #     self.target.OpenRegister(1)
+        for i in range((GlobalVariables.MaxRegisterAmount // 2) + 1):
+            self.assertTrue(self.target.Registers[i].IsOpen)
+            self.assertEqual(len(self.target.Registers[i].Customers), 0)
 
-    #     self.assertTrue(self.target.Registers[1].IsOpen)
-    #     self.assertEqual(1, len(self.target.Registers[0].Customers))
-    #     self.assertEqual(1, len(self.target.Registers[1].Customers))
+    def test_OpenRegister_WhenOpeningCreates2OpenRegisters_CustomersBecomeBalanced(self) -> None:
+        self.target.CloseRegister(1)
+
+        customers = [str(c) for c in range(7)]
+
+        for c in customers:
+            self.target.Registers[0].AddPerson(c)
+
+        self.target.OpenRegister(1)
+
+        sizes = [len(r.Customers) for r in self.target.Registers if r.IsOpen]
+
+        self.assertTrue(self.target.Registers[1].IsOpen)
+        self.assertEqual(sum(sizes), len(customers))
+        self.assertLessEqual(max(sizes) - min(sizes), 1)
+
+    def test_OpenRegister_WhenOpeningCreates3OpenRegisters_CustomersBecomeBalanced(self) -> None:
+        customers1 = [str(c) for c in range(7)]
+        customers2 = [str(c) for c in range(12)]
+
+        all_customers = [customers1, customers2]
+
+        for i, customers in enumerate(all_customers):
+            for c in customers:
+                self.target.Registers[i].AddPerson(c)
+
+        self.target.OpenRegister(2)
+
+        sizes = [len(r.Customers) for r in self.target.Registers if r.IsOpen]
+
+        self.assertTrue(self.target.Registers[2].IsOpen)
+        self.assertEqual(sum(sizes), len(customers1) + len(customers2))
+        self.assertLessEqual(max(sizes) - min(sizes), 1)
+
+    def test_OpenRegister_WhenOpeningCreatesAllRegistersOpen_CustomersBecomeBalanced(self) -> None:
+        for i in range(GlobalVariables.MaxRegisterAmount // 2, GlobalVariables.MaxRegisterAmount - 1):
+            self.target.OpenRegister(i)
+
+        customers1 = [str(c) for c in range(7)]
+        customers2 = [str(c) for c in range(12)]
+        customers3 = [str(c) for c in range(2)]
+        customers4 = [str(c) for c in range(9)]
+
+        all_customers = [customers1, customers2, customers3, customers4]
+        total_customers = 0
+
+        for i, customers in enumerate(all_customers):
+            total_customers += len(customers)
+
+            for c in customers:
+                self.target.Registers[i].AddPerson(c)
+
+        self.target.OpenRegister(GlobalVariables.MaxRegisterAmount - 1)
+
+        sizes = [len(r.Customers) for r in self.target.Registers if r.IsOpen]
+
+        self.assertTrue(self.target.Registers[GlobalVariables.MaxRegisterAmount - 1].IsOpen)
+        self.assertEqual(sum(sizes), total_customers)
+        self.assertLessEqual(max(sizes) - min(sizes), 1)
+
+    def test_OpenRegister_WhenOpeningCreates2OpenRegisters_OrderIsPreserved(self) -> None:
+        self.target.CloseRegister(1)
+
+        customers = [str(c) for c in range(4)]
+        expected_customers = [["0", "1"], ["3", "2"]]
+
+        for c in customers:
+            self.target.Registers[0].AddPerson(c)
+
+        self.target.OpenRegister(1)
+
+        self.assertTrue(self.target.Registers[1].IsOpen)
+
+        for i in range(2):
+            self.assertEqual(self.target.Registers[i].Customers, expected_customers[i])
 
     def test_ServeCustomer_WhenRegisterNumberIsNegative_RaisesInvalidRegisterNumberException(self) -> None:
         with self.assertRaises(InvalidRegisterNumberException):
