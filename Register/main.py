@@ -53,7 +53,7 @@ def print_registers(shop: Shop) -> None:
     print()
 
 def read_register_index(shop: Shop) -> int:
-    user_input = input(f"Register number (1 - {len(shop.Registers)}): ")
+    user_input = input(f"Register number (1 - {len(shop.Registers)}): ").strip()
 
     register_number = int(user_input)
 
