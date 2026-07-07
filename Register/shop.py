@@ -58,6 +58,9 @@ class Shop:
         self.RedistributeCustomers(customers)
 
     def BalanceCustomers(self) -> None:
+        if self.OpenRegisterCount == 0:
+            return
+
         while True:
             low, high = self.FindLowestAndHighestCustomerAmountInRegisters()
 
