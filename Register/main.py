@@ -94,8 +94,9 @@ def close_register_ui(shop: Shop) -> None:
 def main() -> None:
     shop = Shop()
 
+    print_registers(shop)
+
     while True:
-        print_registers(shop)
         print_menu()
 
         choice = input("Choose option: ").strip()
