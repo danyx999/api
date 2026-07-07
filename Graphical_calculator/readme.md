@@ -64,7 +64,22 @@ python .\graphical_calculator.py
   * The application only supports 2 or 3 integers for LCM and GCD.
   * Prime number product only supports one integer at a time.
   * Input must be entered using semicolons.
-  * The project uses older structure because it was created in my programming learning process.
+  * The project uses an older structure because it was created early in my programming learning process.
+  * Most of the application is implemented in a single file, which reflects my earlier programming style.
+
+## Testing Notes
+
+  * This project does not include automated tests.
+  * It was created before I started using unit testing.
+  * Future improvements could include tests for GCD, LCM, prime number product and invalid input handling.
+
+## Possible Future Improvements
+
+  * Add unit tests for mathematical operations and input validation
+  * Split the project into separate files/modules
+  * Improve input validation
+  * Refactor the mathematical logic into separate modules
+  * Improve the GUI layout
 
 ## Design Notes
 
