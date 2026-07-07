@@ -92,7 +92,40 @@ def close_register_ui(shop: Shop) -> None:
     print(f"Register {register_index + 1} was closed")
 
 def main() -> None:
-    pass
+    shop = Shop()
+
+    while True:
+        print_registers(shop)
+        print_menu()
+
+        choice = input("Choose option: ").strip()
+
+        try:
+            if choice == "1":
+                print_registers(shop)
+            elif choice == "2":
+                add_customer_ui(shop)
+            elif choice == "3":
+                serve_customer_ui(shop)
+            elif choice == "4":
+                open_register_ui(shop)
+            elif choice == "5":
+                close_register_ui(shop)
+            elif choice == "6":
+                shop.BalanceCustomers()
+                print("Customers balanced")
+            elif choice == "0":
+                print("Goodbye!")
+                break
+            else:
+                print("Invalid option")
+
+        except ValueError:
+            print("Error: Please enter a valid number")
+        except CUSTOM_EXCEPTIONS as error:
+            print(f"Error: {error}")
+
+        input("Press enter to continue...")
 
 if __name__ == "__main__":
     main()
