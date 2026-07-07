@@ -77,6 +77,20 @@ def serve_customer_ui(shop: Shop) -> None:
 
     print("Customer served")
 
+def open_register_ui(shop: Shop) -> None:
+    register_index = read_register_index(shop)
+
+    shop.OpenRegister(register_index)
+
+    print(f"Register {register_index + 1} was opened")
+
+def close_register_ui(shop: Shop) -> None:
+    register_index = read_register_index(shop)
+
+    shop.CloseRegister(register_index)
+
+    print(f"Register {register_index + 1} was closed")
+
 def main() -> None:
     pass
 
