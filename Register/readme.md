@@ -154,6 +154,12 @@ python .\test_register_shop.py
 * When customers are redistributed or balanced, customers from the back of the queue are moved first.
 * Invalid operations are handled using custom exceptions.
 
+## Known Limitations
+
+* Customers are only represented only as names.
+* There is no save/load system.
+* Products, prizes and serving times are not implemented.
+
 ## Possible Future Improvements
 
 * Dedicated `Customer` class
