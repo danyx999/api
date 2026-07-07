@@ -7,7 +7,7 @@ This repository contains programming exercises and projects from high school.
 | Project | Type | Status | Main Focus |
 |---|---|---|---|
 | Graphical Calculator | GUI app | Completed | Math algorithms and GUI |
-| Infoprog | CLI app | Completed | Event tracking and TDD |
+| Infoprog | CLI app | In Progress | Event tracking and TDD |
 | Register | CLI simulation | Completed v1.0 | OOP, queues, exceptions and TDD |
 
 ## Repository Structure
