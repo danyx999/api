@@ -231,7 +231,7 @@ class ShopTests(unittest.TestCase):
         self.target.Registers[0].AddPerson("1")
         self.target.Registers[1].AddPerson("1")
         self.target.Registers[2].AddPerson("1")
-        self.target.Registers[3].Close()
+        self.target.CloseRegister(3)
         self.target.Registers[4].AddPerson("1")
 
         self.target.AddNewCustomer("Name")
