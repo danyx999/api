@@ -252,5 +252,5 @@ def main() -> None:
     app = App()
     app.mainloop()
 
-
-main()
+if __name__ == "__name__":
+    main()
