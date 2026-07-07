@@ -813,5 +813,5 @@ class ShopTests(unittest.TestCase):
 
         self.assertEqual(len(self.target.Registers[0].Customers), 0)
 
-
-unittest.main()
+if __name__ == "__main__":
+    unittest.main()
