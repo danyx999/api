@@ -47,6 +47,13 @@ TODO: Show how to run tests
   * Some parts of the structure reflect an earlier stage of my programming experience.
   * The project would benefit from refactoring before being expanded further.
 
+## Testing notes
+
+ * The project contains tests for some core behavior.
+ * The test suite is not complete yet.
+ * Some important edge cases are probably missing.
+ * Future improvements should include more modular tests, reusable setup helpers and additional cases for invalid input, editing, sorting and missing functionality.
+
 ## Documentation TODO
 
   * Add CLI Menu Explanation
@@ -61,6 +68,7 @@ TODO: Show how to run tests
   * Improve input validation
   * Add and update unit tests
   * Separate UI logic from event-handling logic more clearly
+  * More unit test cases, resuable setup helpers and modular tests
 
 ## Status
 
