@@ -33,7 +33,7 @@ def print_menu() -> None:
 
 def print_registers(shop: Shop) -> None:
     print()
-    print(f"Registers open: {shop.OpenRegisterCount}  | Total registers: {len(shop.Registers)}")
+    print(f"Registers open: {shop.OpenRegisterCount:<2} | Total registers: {len(shop.Registers)}")
 
     for idx, register in enumerate(shop.Registers):
         display_number = idx + 1
