@@ -36,8 +36,8 @@ class Shop:
         self.Registers[i].AddPerson(name)
 
     def RedistributeCustomers(self, customers: list[str]) -> None:
-        while len(customers) > 0:
-            self.AddNewCustomer(customers.pop())
+        for customer in reversed(customers):
+            self.AddNewCustomer(customer)
 
     def CloseRegister(self, registerNum: int) -> None:
         self.ValidateRegisterNumber(registerNum)
