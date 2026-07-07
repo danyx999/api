@@ -1,8 +1,11 @@
 # Graphical Calculator
 
+## Description
+
 Graphical Calculator is my first year project in high school. It's a simple GUI app that can calculate the least common multiple (LCM) and greatest common divisor (GCD) of 2 or 3 integers and the Prime Number Product of an integer.
 
 ## Current Features
+
   * GUI
   * GCD for 2 or 3 integers
   * LCM for 2 or 3 integers
@@ -11,6 +14,7 @@ Graphical Calculator is my first year project in high school. It's a simple GUI 
   * Custom exceptions for invalid operations
 
 ## GUI Menu Explanation
+
   * On the right hand side choose an operation.
   * On the left enter 2 or 3 integers if LCM or GCD was chosen and only 1 integer if Prime Number Product was chosen.
   * Press Enter to get the result, the result will appear in green under the integer entry field.
@@ -19,16 +23,19 @@ Graphical Calculator is my first year project in high school. It's a simple GUI 
   * Press the Quit button to exit from the application.
 
 ## How LCM Works
+
   1. Multiply the 2 numbers.
 	2. Divide the result by the GCD of the 2 numbers.
 
 ## How GCD works
+
   1. Assign the second number to the first number.
   2. Assign the remainder of the division between the first number with the second number to the second number.
   3. Repeat until the second number is 0 (Euclid's Algorithm).
   4. If the result is 1, it means that the two numbers are co-prime, meaning they don't have a common divisor except number 1.
 
 ## How Prime Number Product works
+
   1. Start with the entered number.
   2. Find the smallest divisor starting from `2`.
   3. Add that divisor to the product list.
@@ -36,6 +43,7 @@ Graphical Calculator is my first year project in high school. It's a simple GUI 
   5. Repeat until the number is reduced to `1`.
 
 ## How to Run
+
 Change the working directory to the project folder:
 ```bash
 cd "Graphical Calculator"
@@ -51,7 +59,15 @@ On Windows, this also works:
 python .\graphical_calculator.py
 ```
 
+## Known Limitations
+
+  * The application only supports 2 or 3 integers for LCM and GCD.
+  * Prime number product only supports one integer at a time.
+  * Input must be entered using semicolons.
+  * The project uses older structure because it was created in my programming learning process.
+
 ## Design Notes
+
   * The application uses tkinter for the graphical user interface.
   * The main window is represented by the App class, which inherits from tk.Tk.
   * User input is entered as text and then validated before any calculation is performed.
@@ -65,4 +81,4 @@ python .\graphical_calculator.py
   * Successful results are displayed in green.
 
 ## Status
-Completed. This project passed with the highest mark.
+Completed. This project was created as a second-year high school project and passed with the highest mark.
