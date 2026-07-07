@@ -59,6 +59,24 @@ def read_register_index(shop: Shop) -> int:
 
     return register_number - 1
 
+def add_customer_ui(shop: Shop) -> None:
+    name = input("Customer name: ".strip())
+
+    if name == "":
+        print("Customer name can't be empty")
+        return
+
+    shop.AddNewCustomer(name)
+
+    print(f"Customer {name} successfully added")
+
+def serve_customer_ui(shop: Shop) -> None:
+    register_index = read_register_index(shop)
+
+    shop.ServeCustomer(register_index)
+
+    print("Customer served")
+
 def main() -> None:
     pass
 
