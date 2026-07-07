@@ -46,7 +46,7 @@ Graphical Calculator is my first year project in high school. It's a simple GUI 
 
 Change the working directory to the project folder:
 ```bash
-cd Graphical_alculator
+cd Graphical_calculator
 ```
 
 Run the program:
