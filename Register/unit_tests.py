@@ -332,6 +332,21 @@ class ShopTests(unittest.TestCase):
         self.assertTrue(self.target.Registers[0].IsOpen)
         self.assertEqual(4, len(self.target.Registers[0].Customers))
 
+    def test_BalanceCustomers_WhenAllRegistersAreClosed_NothingHappens(self) -> None:
+        for index, register in enumerate(self.target.Registers):
+            if register.IsOpen:
+                self.target.CloseRegister(index)
+
+        self.assertEqual(0, self.target.OpenRegisterCount)
+
+        self.target.BalanceCustomers()
+
+        self.assertEqual(0, self.target.OpenRegisterCount)
+
+        for register in self.target.Registers:
+            self.assertFalse(register.IsOpen)
+            self.assertEqual([], register.Customers)
+
     def test_BalanceCustomers_When1RegisterIsOpenAndHasNoCustomers_NothingHappens(self) -> None:
         self.target.CloseRegister(1)
 
