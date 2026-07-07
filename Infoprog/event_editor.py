@@ -5,10 +5,12 @@ from global_variables import GlobalVariables
 
 
 class EventEditor:
+    @staticmethod
     def HandleEdit(
         EventList: list[Event], eventNumber: int, editMode: str, changes: str
     ) -> list[Event]:
         eventToEdit = EventList.pop(eventNumber)
+
         match editMode:
             case "1":
                 editedEvent = EventEditor.EditStartTime(eventToEdit, changes)
@@ -18,23 +20,34 @@ class EventEditor:
                 editedEvent = EventEditor.EditDate(eventToEdit, changes)
             case "4":
                 editedEvent = EventEditor.EditNote(eventToEdit, changes)
+            case _:
+                EventList.append(eventToEdit)
+                return EventHandler.SortEventsByDate(EventList)
 
         EventList.append(editedEvent)
 
         return EventHandler.SortEventsByDate(EventList)
 
+    @staticmethod
     def EditStartTime(eventToEdit: Event, startTime: str) -> Event:
         eventToEdit.StartTime = datetime.strptime(startTime, GlobalVariables.TimeFormat)
+
         return eventToEdit
 
+    @staticmethod
     def EditEndTime(eventToEdit: Event, endTime: str) -> Event:
         eventToEdit.EndTime = datetime.strptime(endTime, GlobalVariables.TimeFormat)
+
         return eventToEdit
 
+    @staticmethod
     def EditDate(eventToEdit: Event, date: str) -> Event:
         eventToEdit.Date = datetime.strptime(date, GlobalVariables.DateFormat)
+
         return eventToEdit
 
+    @staticmethod
     def EditNote(eventToEdit: Event, note: str) -> Event:
         eventToEdit.Text = note
+
         return eventToEdit

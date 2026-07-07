@@ -3,7 +3,7 @@ from event import Event
 from event_checker import EventChecker
 from event_handler import EventHandler
 from event_editor import EventEditor
-from event_deletor import EventDeletor
+# from event_deletor import EventDeletor
 
 
 class EventCheckerTests(unittest.TestCase):
@@ -202,7 +202,7 @@ class EventEditorTests(unittest.TestCase):
             Event("6:53", "14:25", "1.7.2005", "NOTE"),
         ]
         eventNumberToEdit = 2
-        mode = 3
+        mode = "3"
         wantedDate = "6.6.2006"
 
         expectedString3 = "14:00;15:00;15.07.2023;NOTE"
@@ -224,7 +224,7 @@ class EventEditorTests(unittest.TestCase):
             Event("15:50", "17:30", "10.04.1998", "NOTE"),
         ]
         eventNumberToEdit = 3
-        mode = 3
+        mode = "3"
         wantedDate = "6.6.2006"
 
         expectedString3 = "14:00;15:00;15.07.2023;NOTE"
@@ -242,5 +242,5 @@ class EventEditorTests(unittest.TestCase):
 class EventDeletorTests(unittest.TestCase):
     pass
 
-
-unittest.main()
+if __name__ == "__main__":
+    unittest.main()

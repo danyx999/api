@@ -3,7 +3,7 @@ from event_checker import EventChecker
 from event_handler import EventHandler
 from global_variables import GlobalVariables
 from event_editor import EventEditor
-from event_deletor import EventDeletor
+# from event_deletor import EventDeletor
 
 from exceptions import (
     TextIsLongerThanMaxTextLengthException,
@@ -16,12 +16,16 @@ from exceptions import (
 
 
 class Menu:
+    @staticmethod
     def GetDate() -> str:
         isDate = False
+        date = ""
+
         while not isDate:
             try:
                 date = input("Enter date of event (using format DD.MM.YYYY): ")
                 isDate = EventChecker.CheckDate(date)
+
                 if not isDate:
                     raise IncorrectDateException
             except IncorrectDateException as e:
@@ -29,8 +33,11 @@ class Menu:
 
         return date
 
+    @staticmethod
     def GetText() -> str:
         isText = False
+        text = ""
+
         while not isText:
             try:
                 text = input(
@@ -44,8 +51,11 @@ class Menu:
 
         return text
 
+    @staticmethod
     def GetStartTime() -> str:
         isTime = False
+        time = ""
+
         while not isTime:
             try:
                 time = input(f"Enter start time of event (using format HH:MM): ")
@@ -57,8 +67,11 @@ class Menu:
 
         return time
 
+    @staticmethod
     def GetEndTime() -> str:
         isTime = False
+        time = ""
+
         while not isTime:
             try:
                 time = input(f"Enter end time of event (using format HH:MM): ")
@@ -70,6 +83,7 @@ class Menu:
 
         return time
 
+    @staticmethod
     def CorrectTimes_CreateNewEvent(startTime: str, endTime: str) -> tuple[str, str]:
         isCorrect = False
         while not isCorrect:
@@ -82,6 +96,7 @@ class Menu:
 
         return startTime, endTime
 
+    @staticmethod
     def CorrectTimes_EditEvent(startTime: str, endTime: str, mode: str) -> str:
         isCorrect = False
         while not isCorrect:
@@ -98,6 +113,7 @@ class Menu:
 
         return startTime, endTime
 
+    @staticmethod
     def CheckTimes(startTime: str, endTime: str) -> bool:
         try:
             isCorrect = EventChecker.CompareTimes(startTime, endTime)
@@ -108,7 +124,8 @@ class Menu:
             print(e.Text)
             return False
 
-    def CheckEventNumber(eventLength: int, eventNumber: str) -> None:
+    @staticmethod
+    def CheckEventNumber(eventLength: int, eventNumber: str) -> bool:
         if not str(eventNumber).isnumeric():
             return False
         elif int(eventNumber) - 1 >= eventLength:
@@ -116,12 +133,15 @@ class Menu:
         else:
             return True
 
-    def PrintEventsSortedByDate(events: list[Event]) -> None:
+    @staticmethod
+    def PrintEventsSortedByDate(events: list[Event]) -> list[Event]:
         for number, event in enumerate(events):
             print(f"{number + 1}-{event.CreateEventStr()}")
+
         return events
 
-    def PrintSearchedEvents(events: list[Event]) -> None:
+    @staticmethod
+    def PrintSearchedEvents(events: list[Event]) -> list[Event]:
         searchedDate = Menu.GetDate()
         searchedEvents = EventHandler.CreateSearchedDateList(events, searchedDate)
         if len(searchedEvents) > 0:
@@ -133,6 +153,7 @@ class Menu:
 
         return events
 
+    @staticmethod
     def CreateNewEvent(events: list[Event]) -> list[Event]:
         startTime = Menu.GetStartTime()
         endTime = Menu.GetEndTime()
@@ -145,6 +166,7 @@ class Menu:
 
         return events
 
+    @staticmethod
     def EditEvent(events: list[Event]) -> list[Event]:
         isEventNumber = False
         while True:
@@ -162,6 +184,9 @@ class Menu:
         )
         isCorrect = False
         isTime = True
+        mode = ""
+        changes = ""
+
         while not isCorrect:
             try:
                 mode = input("Enter your choice: ")
@@ -216,9 +241,11 @@ class Menu:
 
         return events
 
+    @staticmethod
     def DeleteEvent(events: list[Event]) -> list[Event]:
-        pass
+        return events
 
+    @staticmethod
     def SaveToFile(events: list[Event]) -> None:
         with open(GlobalVariables.FilePath, "w") as f:
             f.write(EventHandler.CreateEventStrToFile(events))
@@ -234,6 +261,7 @@ def main() -> None:
         "4": Menu.EditEvent,
         "5": Menu.DeleteEvent,
     }
+
     while True:
         try:
             print(
@@ -241,6 +269,7 @@ def main() -> None:
             )
             chosenOption = input("Enter your choice: ")
             chosenFunction = menu.get(chosenOption)
+
             if chosenFunction:
                 events = chosenFunction(events)
             elif chosenOption == "0":
