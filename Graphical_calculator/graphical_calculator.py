@@ -1,5 +1,4 @@
 import tkinter as tk
-from tkinter import ttk
 
 GEOMETRY = "575x170"
 
@@ -74,37 +73,42 @@ class App(tk.Tk):
             self.buttonFrame, text="Delete", command=self.deleteText
         )
         self.deleteButton.grid(column=1, row=0, padx=55)
-        self.quitButton = tk.Button(self.buttonFrame, text="Quit", command=quit)
+        self.quitButton = tk.Button(self.buttonFrame, text="Quit", command=self.destroy)
         self.quitButton.grid(column=2, row=0, padx=55)
 
     def startChosenFunction(self) -> None:
         chosenFunction = self.menu.get(self.modeChoice.get())
+
+        assert chosenFunction is not None
+
         chosenFunction()
 
     def doLcm(self) -> None:
         numbers = self.getEnteredValues()
-        if numbers is None:
+        if numbers == []:
             return
+
         self.result = Lcm(numbers)
         self.displayResult()
 
     def doGcd(self) -> None:
         numbers = self.getEnteredValues()
-        if numbers is None:
+        if numbers == []:
             return
+
         self.result = Gcd(numbers)
         self.displayResult()
 
     def doPrimeNumberProduct(self) -> None:
         numberToConvert = self.getValueForPrimeNumberProduct()
-        if numberToConvert is None:
+        if numberToConvert == -1:
             return
         self.result = PrimeNumberProduct()
         self.result.getPrimeNumberProduct(numberToConvert)
         self.displayResult()
 
     def getEnteredValues(self) -> list[int]:
-        numbers = []
+        numbers: list[int] = []
         temp = self.numberEntry.get()
         splitValues = temp.split(";")
 
@@ -116,7 +120,7 @@ class App(tk.Tk):
                     raise IncorrectlyEnteredOrSeparatedNumbers
             except IncorrectlyEnteredOrSeparatedNumbers as e:
                 self.displayErrorMessage(e.Message)
-                return
+                return []
 
         try:
             if len(numbers) < 2:
@@ -125,10 +129,10 @@ class App(tk.Tk):
                 raise TooManyNumbersEnteredException
         except NotEnoughNumbersEnteredException as e:
             self.displayErrorMessage(e.Message)
-            return
+            return []
         except TooManyNumbersEnteredException as e:
             self.displayErrorMessage(e.Message)
-            return
+            return []
 
         return numbers
 
@@ -142,15 +146,18 @@ class App(tk.Tk):
         except IncorrectlyEnteredOrSeparatedNumbers as e:
             self.displayErrorMessage(e.Message)
 
-    def checkNumber(self, number: int) -> bool:
+        return -1
+
+    def checkNumber(self, number: str) -> bool:
         try:
             int(number)
             return True
+
         except ValueError:
             return False
 
     def displayResult(self) -> None:
-        self.resultText.config(text=self.result, fg="green")
+        self.resultText.config(text=str(self.result), fg="green")
 
     def displayErrorMessage(self, message: str) -> None:
         self.resultText.config(text=message, fg="red")
@@ -180,9 +187,10 @@ class PrimeNumberProduct:
         if self.NumberToConvert in self.ProductList:
             return f"{self.NumberToConvert} is a prime number"
         else:
-            numbers = []
+            numbers: list[str] = []
             for num in self.ProductList:
                 numbers.append(str(num))
+
             return f"{self.NumberToConvert} = {' x '.join(numbers)}"
 
 
@@ -193,13 +201,16 @@ class MyMath:
     def __init__(self, nums: list[int]) -> None:
         self.Numbers = nums
 
+    @staticmethod
     def getGcd(num1: int, num2: int) -> int:
         while num2 > 0:
             num1, num2 = num2, num1 % num2
+
         return num1
 
-    def getLcm(num1, num2) -> float:
-        return num1 * num2 / MyMath.getGcd(num1, num2)
+    @staticmethod
+    def getLcm(num1: int, num2: int) -> int:
+        return num1 * num2 // MyMath.getGcd(num1, num2)
 
 
 class Gcd(MyMath):
@@ -219,9 +230,11 @@ class Gcd(MyMath):
         self.Result = MyMath.getGcd(MyMath.getGcd(num1, num2), num3)
 
     def __str__(self) -> str:
-        numbers = []
+        numbers: list[str] = []
+
         for num in self.Numbers:
             numbers.append(str(num))
+
         return f"GCD({', '.join(numbers)}) = {self.Result}"
 
 
@@ -242,9 +255,11 @@ class Lcm(MyMath):
         self.Result = int(MyMath.getLcm(MyMath.getLcm(num1, num2), num3))
 
     def __str__(self) -> str:
-        numbers = []
+        numbers: list[str] = []
+
         for num in self.Numbers:
             numbers.append(str(num))
+
         return f"LCM({', '.join(numbers)}) = {self.Result}"
 
 
@@ -252,5 +267,5 @@ def main() -> None:
     app = App()
     app.mainloop()
 
-if __name__ == "__name__":
+if __name__ == "__main__":
     main()
