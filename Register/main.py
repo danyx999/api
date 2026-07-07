@@ -43,9 +43,9 @@ def print_registers(shop: Shop) -> None:
         else:
             status = "Closed"
 
-        customers = ", ".join(register.Customers)
-
-        if customers == "":
+        if len(register.Customers) > 0:
+            customers = ", ".join(register.Customers)
+        else:
             customers = "No customers"
 
         print(f"Register {display_number}: {status:<6} | {customers}")
