@@ -291,12 +291,11 @@ class EventDeletorTests(unittest.TestCase):
         eventToDelete = 1
         expectedString1 = "06:53;14:25;01.07.2005;NOTE"
         expectedString2 = "15:30;17:30;10.04.1998;NOTE"
-        
 
         events = EventDeletor.DeleteEvent(eventList, eventToDelete - 1)
 
-        self.assertEqual(eventList[0].CreateEventStr(), expectedString1)
-        self.assertEqual(eventList[1].CreateEventStr(), expectedString2)
+        self.assertEqual(events[0].CreateEventStr(), expectedString1)
+        self.assertEqual(events[1].CreateEventStr(), expectedString2)
 
 if __name__ == "__main__":
     unittest.main()
