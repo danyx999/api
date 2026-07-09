@@ -273,7 +273,7 @@ class EventDeletorTests(unittest.TestCase):
 
         eventToDelete = 2
         expectedString1 = "14:00;15:00;15.07.2023;NOTE"
-        expectedString2 = "15:30;17:30;10.04.1998;NOTE"
+        expectedString2 = "15:50;17:30;10.04.1998;NOTE"
 
         events = EventDeletor.DeleteEvent(eventList, eventToDelete - 1)
 
@@ -290,7 +290,7 @@ class EventDeletorTests(unittest.TestCase):
 
         eventToDelete = 1
         expectedString1 = "06:53;14:25;01.07.2005;NOTE"
-        expectedString2 = "15:30;17:30;10.04.1998;NOTE"
+        expectedString2 = "15:50;17:30;10.04.1998;NOTE"
 
         events = EventDeletor.DeleteEvent(eventList, eventToDelete - 1)
 
