@@ -3,7 +3,7 @@ from event import Event
 from event_checker import EventChecker
 from event_handler import EventHandler
 from event_editor import EventEditor
-# from event_deletor import EventDeletor
+from event_deletor import EventDeletor
 
 
 class EventCheckerTests(unittest.TestCase):
@@ -240,7 +240,63 @@ class EventEditorTests(unittest.TestCase):
 
 
 class EventDeletorTests(unittest.TestCase):
-    pass
+    def test_DeleteEvent_EventListHas1Event_ReturnsEmptyEventList(self) -> None:
+        events = EventDeletor.DeleteEvent([Event("11:00", "12:00", "19.7.2023", "NOTE")], 0)
+
+        self.assertEqual(len(events), 0)
+        self.assertEqual(events, [])
+
+    def test_DeleteEvent_EventListHas3EventsAndLastIsDeleted_ReturnsEventListWith2Events(self) -> None:
+        # Starts with 1
+        eventList = [
+            Event("14:00", "15:00", "15.7.2023", "NOTE"),
+            Event("6:53", "14:25", "1.7.2005", "NOTE"),
+            Event("15:50", "17:30", "10.04.1998", "NOTE"),
+        ]
+
+        eventToDelete = 3
+        expectedString1 = "14:00;15:00;15.07.2023;NOTE"
+        expectedString2 = "06:53;14:25;01.07.2005;NOTE"
+
+        events = EventDeletor.DeleteEvent(eventList, eventToDelete - 1)
+
+        self.assertEqual(events[0].CreateEventStr(), expectedString1)
+        self.assertEqual(events[1].CreateEventStr(), expectedString2)
+
+    def test_DeleteEvent_EventListHas3EventsAndMiddleIsDeleted_ReturnsEventListWith2Events(self) -> None:
+        # Starts with 1
+        eventList = [
+            Event("14:00", "15:00", "15.7.2023", "NOTE"),
+            Event("6:53", "14:25", "1.7.2005", "NOTE"),
+            Event("15:50", "17:30", "10.04.1998", "NOTE"),
+        ]
+
+        eventToDelete = 2
+        expectedString1 = "14:00;15:00;15.07.2023;NOTE"
+        expectedString2 = "15:30;17:30;10.04.1998;NOTE"
+
+        events = EventDeletor.DeleteEvent(eventList, eventToDelete - 1)
+
+        self.assertEqual(events[0].CreateEventStr(), expectedString1)
+        self.assertEqual(events[1].CreateEventStr(), expectedString2)
+
+    def test_DeleteEvent_EventListHas3EventsAndFirstIsDeleted_ReturnsEventListWith2Events(self) -> None:
+        # Starts with 1
+        eventList = [
+            Event("14:00", "15:00", "15.7.2023", "NOTE"),
+            Event("6:53", "14:25", "1.7.2005", "NOTE"),
+            Event("15:50", "17:30", "10.04.1998", "NOTE"),
+        ]
+
+        eventToDelete = 1
+        expectedString1 = "06:53;14:25;01.07.2005;NOTE"
+        expectedString2 = "15:30;17:30;10.04.1998;NOTE"
+        
+
+        events = EventDeletor.DeleteEvent(eventList, eventToDelete - 1)
+
+        self.assertEqual(eventList[0].CreateEventStr(), expectedString1)
+        self.assertEqual(eventList[1].CreateEventStr(), expectedString2)
 
 if __name__ == "__main__":
     unittest.main()
