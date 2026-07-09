@@ -3,7 +3,7 @@ from event_checker import EventChecker
 from event_handler import EventHandler
 from global_variables import GlobalVariables
 from event_editor import EventEditor
-# from event_deletor import EventDeletor
+from event_deletor import EventDeletor
 
 from exceptions import (
     TextIsLongerThanMaxTextLengthException,
@@ -111,8 +111,6 @@ class Menu:
         else:
             return endTime
 
-        return startTime, endTime
-
     @staticmethod
     def CheckTimes(startTime: str, endTime: str) -> bool:
         try:
@@ -128,7 +126,7 @@ class Menu:
     def CheckEventNumber(eventLength: int, eventNumber: str) -> bool:
         if not str(eventNumber).isnumeric():
             return False
-        elif int(eventNumber) - 1 >= eventLength:
+        elif int(eventNumber) - 1 >= eventLength or int(eventNumber) < 1:
             return False
         else:
             return True
@@ -169,9 +167,11 @@ class Menu:
     @staticmethod
     def EditEvent(events: list[Event]) -> list[Event]:
         isEventNumber = False
+
         while True:
             eventNumberToEdit = input("Enter the number of event to edit: ")
             isEventNumber = Menu.CheckEventNumber(len(events), eventNumberToEdit)
+
             if not isEventNumber:
                 print("Incorrectly entered event number")
             else:
@@ -243,6 +243,44 @@ class Menu:
 
     @staticmethod
     def DeleteEvent(events: list[Event]) -> list[Event]:
+        if events == []:
+            print("Can't delete events because no events are recorded")
+
+            return events
+
+        eventNum = -1
+
+        while True:
+            eventNum = input("Enter event number to edit: ")
+
+            if not Menu.CheckEventNumber(len(events), eventNum):
+                print("Incorrect event number entered")
+                continue
+
+            break
+
+        choice = ""
+
+        while True:
+            choice = input(f"Are you sure you want to delete event {eventNum}? (Y - Yes, N - No): ")
+
+            if choice.lower() == "y":
+                break
+            elif choice.lower() == "n":
+                print("No events were deleted")
+
+                return events
+            else:
+                print("Incorrect option entered")
+
+        print(f"Event {eventNum} was deleted")
+
+        eventNum = int(eventNum) - 1
+
+        events = EventDeletor.DeleteEvent(events, eventNum)
+
+        Menu.SaveToFile(events)
+
         return events
 
     @staticmethod
@@ -264,6 +302,7 @@ def main() -> None:
 
     while True:
         try:
+            print()
             print(
                 "Choose from the following:\n1 - Write out events\n2 - Search for events by date\n3 - Add new event\n4 - Edit event\n5 - Delete Event\n0 - Exit"
             )
